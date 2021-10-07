@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useCallback, useState } from "react";
 import Link from "next/link";
 import styled from "@emotion/styled";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGlobeAsia } from "@fortawesome/free-solid-svg-icons";
+import { faGlobeAsia, faBars } from "@fortawesome/free-solid-svg-icons";
 
 const NavStyle = styled.nav`
   color: white;
@@ -16,17 +16,15 @@ const NavStyle = styled.nav`
   z-index: 10;
   @media screen and (max-width: 768px) {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     height: auto;
+    padding: 8px 8px;
   }
 `;
 
 const TogetherDiv = styled.div`
   padding-left: 10px;
   font-size: 18px;
-  :hover {
-    font-size: 20px;
-  }
 `;
 
 const List = styled.ul`
@@ -38,7 +36,8 @@ const List = styled.ul`
     width: 100%;
     margin-left: 0;
     align-items: center;
-  }
+    display: ${({ openedMenu }) => (openedMenu ? "none" : "flex")};
+  } ;
 `;
 
 const Item = styled.li`
@@ -53,6 +52,13 @@ const Item = styled.li`
     background-color: #d49466;
     border-radius: 7px;
   }
+  @media screen and (max-width: 768px) {
+    text-align: center;
+    width: 100%;
+    &:hover {
+      border-radius: 5px;
+    }
+  }
 `;
 
 const MenuContent = styled.span`
@@ -64,7 +70,22 @@ const Home = styled.span`
   padding-left: 5px;
 `;
 
+const Menu = styled.a`
+  display: none;
+  position: absolute;
+  left: 10px;
+  font-size: 20px;
+  color: #000;
+  @media screen and (max-width: 768px) {
+    display: block;
+  }
+`;
+
 const Header = () => {
+  const [openedMenu, setOpenedMenu] = useState(false);
+  const onCLickMenu = useCallback(() => {
+    setOpenedMenu((prev) => !prev);
+  }, []);
   return (
     <NavStyle>
       <TogetherDiv>
@@ -73,7 +94,7 @@ const Header = () => {
           <Home>Together</Home>
         </Link>
       </TogetherDiv>
-      <List>
+      <List openedMenu={openedMenu}>
         <Item>
           <Link href="/profile">
             <MenuContent>프로필</MenuContent>
@@ -90,6 +111,10 @@ const Header = () => {
           </Link>
         </Item>
       </List>
+
+      <Menu href="#" onClick={onCLickMenu}>
+        <FontAwesomeIcon icon={faBars} />
+      </Menu>
     </NavStyle>
   );
 };
