@@ -1,65 +1,96 @@
-import React, { Fragment } from "react";
-import { useRouter } from "next/router";
+import React from "react";
 import Link from "next/link";
 import styled from "@emotion/styled";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faGlobeAsia } from "@fortawesome/free-solid-svg-icons";
 
-const DivStyle = styled.div`
+const NavStyle = styled.nav`
   color: white;
-  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 50px;
   display: flex;
   align-items: center;
-  background-color: rgba(20, 20, 20, 0.7);
+  background-color: #017374;
   z-index: 10;
-  box-shadow: 0 1px 5px 2px rgba(0, 0, 0, 0.8);
+  @media screen and (max-width: 768px) {
+    flex-direction: column;
+    align-items: flex-start;
+    height: auto;
+  }
+`;
+
+const TogetherDiv = styled.div`
+  padding-left: 10px;
+  font-size: 18px;
+  :hover {
+    font-size: 20px;
+  }
 `;
 
 const List = styled.ul`
   display: flex;
+  justify-content: center;
+  margin-left: 40px;
+  @media screen and (max-width: 768px) {
+    flex-direction: column;
+    width: 100%;
+    margin-left: 0;
+    align-items: center;
+  }
 `;
 
 const Item = styled.li`
   width: 80px;
-  height: 50px;
-  text-align: center;
-  border-bottom: 5px solid
-    ${(props) => (props.current ? "#3498db" : "transparent")};
+  border-bottom: 5px solid transparent;
   transition: border-bottom.5s ease-in-out;
+  display: flex;
+  justify-content: center;
+  padding: 8px 12px;
+  align-items: center;
+  &:hover {
+    background-color: #d49466;
+    border-radius: 7px;
+  }
 `;
 
-const Slink = styled(Link)`
-  height: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+const MenuContent = styled.span`
+  cursor: pointer;
+`;
+
+const Home = styled.span`
+  cursor: pointer;
+  padding-left: 5px;
 `;
 
 const Header = () => {
-  const router = useRouter();
-  console.log(router.asPath);
   return (
-    <DivStyle>
+    <NavStyle>
+      <TogetherDiv>
+        <FontAwesomeIcon icon={faGlobeAsia} color="#D0FEFE" />
+        <Link href="/">
+          <Home>Together</Home>
+        </Link>
+      </TogetherDiv>
       <List>
         <Item>
-          <Link href="/">
-            <Slink>투게더</Slink>
+          <Link href="/profile">
+            <MenuContent>프로필</MenuContent>
           </Link>
         </Item>
         <Item>
-          <Link href="/profile">
-            <Slink>프로필</Slink>
+          <Link href="/">
+            <MenuContent>커뮤니티</MenuContent>
           </Link>
         </Item>
         <Item>
           <Link href="/signup">
-            <Slink>회원가입</Slink>
+            <MenuContent>회원가입</MenuContent>
           </Link>
         </Item>
       </List>
-    </DivStyle>
+    </NavStyle>
   );
 };
 
