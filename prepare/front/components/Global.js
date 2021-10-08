@@ -43,9 +43,25 @@ const style = css`
     margin: 0;
     padding: 0;
   }
+
   body {
-    font-family: "Noto Sans CJK KR";
+    font-family: "Noto Sans CJK KR", sans-serif;
     box-sizing: border-box;
+    background-color: #1f3b4d;
+  }
+  a {
+    text-decoration: none;
+    color: white;
+  }
+  .ant-row {
+    margin-right: 0 !important;
+    margin-left: 0 !important;
+  }
+  .ant-col:first-child {
+    padding-left: 0 !important;
+  }
+  .ant-col:last-child {
+    padding-right: 0 !important;
   }
 `;
 

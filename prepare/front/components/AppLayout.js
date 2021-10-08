@@ -1,16 +1,32 @@
 import React from "react";
 import PropTypes from "prop-types";
-import Link from "next/link";
-import { jsx, css } from "@emotion/react";
+import { Row, Col } from "antd";
 import Global from "./Global";
 import Header from "./Header";
+import LogInForm from "./LogInForm";
 
 const AppLayout = ({ children }) => {
   return (
     <div>
       <Global />
       <Header />
-      {children}
+      <Row gutter={8}>
+        <Col xs={24} md={6}>
+          <LogInForm />
+        </Col>
+        <Col xs={24} md={12}>
+          {children}
+        </Col>
+        <Col xs={24} md={6}>
+          <a
+            href="https://lost731.github.io"
+            target="_black"
+            rel="noreferrer noopener"
+          >
+            made by KimNaMu
+          </a>
+        </Col>
+      </Row>
     </div>
   );
 };

@@ -14,6 +14,7 @@ const NavStyle = styled.nav`
   align-items: center;
   background-color: #017374;
   z-index: 10;
+  box-shadow: 1px 2px rgba(0, 0, 0, 0.2);
   @media screen and (max-width: 768px) {
     flex-direction: column;
     align-items: center;
@@ -25,6 +26,10 @@ const NavStyle = styled.nav`
 const TogetherDiv = styled.div`
   padding-left: 10px;
   font-size: 18px;
+  @media screen and (max-width: 768px) {
+    padding-right: 15px;
+    padding-bottom: 10px;
+  }
 `;
 
 const List = styled.ul`
@@ -41,7 +46,7 @@ const List = styled.ul`
 `;
 
 const Item = styled.li`
-  width: 80px;
+  width: 100px;
   border-bottom: 5px solid transparent;
   transition: border-bottom.5s ease-in-out;
   display: flex;
@@ -89,9 +94,11 @@ const Header = () => {
   return (
     <NavStyle>
       <TogetherDiv>
-        <FontAwesomeIcon icon={faGlobeAsia} color="#D0FEFE" />
         <Link href="/">
-          <Home>Together</Home>
+          <Home>
+            <FontAwesomeIcon icon={faGlobeAsia} color="#D0FEFE" />
+            Together
+          </Home>
         </Link>
       </TogetherDiv>
       <List openedMenu={openedMenu}>
