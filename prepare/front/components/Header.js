@@ -15,6 +15,7 @@ const NavStyle = styled.nav`
   background-color: #017374;
   z-index: 10;
   box-shadow: 1px 2px rgba(0, 0, 0, 0.2);
+  margin-bottom: 10px;
   @media screen and (max-width: 768px) {
     flex-direction: column;
     align-items: center;
