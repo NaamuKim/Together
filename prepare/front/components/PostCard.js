@@ -13,8 +13,8 @@ import PostImages from "./PostImages";
 import styled from "@emotion/styled";
 import CommentForm from "./CommentForm";
 
-const StyledDiv = `
-    margin-bottom:20px;
+const StyledDiv = styled.div`
+  margin-bottom: 20px;
 `;
 
 const PostCard = ({ post }) => {
@@ -27,6 +27,10 @@ const PostCard = ({ post }) => {
 
   const onUnlike = useCallback(() => {
     setLiked(false);
+  }, []);
+
+  const onToggleComment = useCallback(() => {
+    setCommentFormOpened((prev) => !prev);
   }, []);
 
   return (
@@ -60,10 +64,7 @@ const PostCard = ({ post }) => {
                 {id && post.User.id === id ? (
                   <>
                     <Button>수정</Button>
-                    <Button
-                      type="danger"
-                      onClick={onRemovePost}
-                    >
+                    <Button type="danger" onClick={onRemovePost}>
                       삭제
                     </Button>
                   </>
@@ -99,7 +100,7 @@ const PostCard = ({ post }) => {
           />
         </div>
       )}
-    </div>
+    </StyledDiv>
   );
 };
 
