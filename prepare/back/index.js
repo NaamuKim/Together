@@ -12,11 +12,11 @@ init();
 
 async function init() {
   const {
-    ADMIN_ID: id,
+    ADMIN_EMAIL: email,
     ADMIN_PASSWORD: password,
-    ADMIN_NAME: name = '관리자'
+    ADMIN_NICKNAME: nickname,
   } = process.env;
 
-  const exAdmin = await User.findOne({ id:id });
-  if (!exAdmin) await User.create({ id, password, name, role: 'Admin' });
+  const exAdmin = await User.findOne({ email:email });
+  if (!exAdmin) await User.create({ email, password, nickname, role: 'Admin' });
 }

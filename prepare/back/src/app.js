@@ -7,8 +7,8 @@ const { notFound, errorHandler } = require('./errors/handlers');
 const app = express();
 
 app.use(process.env.NODE_ENV === 'development' ? morgan('dev') : morgan('combined'));
-app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.use(cors());
 app.use(router);
 app.use(notFound);

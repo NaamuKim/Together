@@ -77,14 +77,13 @@ exports.getPost = asyncHandler(async(req, res)=>{
 });
 
 exports.updatePost = asyncHandler( async(req, res) => {
-  const { params: { id }, body: {title, article} = {}, user} = req;
+  const { params: { id }, body: {content, hashTags}, user} = req;
 
   const userId = await User.findById(user._id).select('-hashedPassword');
 
-  const $set = {title, article};
   const document = await db.Post.findOne({id:id})
   if(document.writer == userId._id || user.role == 'admin') {
-    await document.updateOne($set);
+    await document.updateOne({content:content});
     res.json({ success: true, status: 200, message:`${id} Post updated`})
   } else {
     throw createError(403);

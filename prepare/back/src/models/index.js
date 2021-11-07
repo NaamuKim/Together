@@ -13,5 +13,6 @@ mongoose.connect(MONGO_URL, {
 module.exports = {
   ...require('./refresh-token.schema'),
   ...require('./user'),
-  ...require('./post')
+  ...require('./post'),
+  ...require('./comments'),
 };
