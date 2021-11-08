@@ -8,7 +8,7 @@ const postModel = new Schema({
     unique: true,
   },
   content:String,
-  user:{
+  writer:{
     id: String,
     nickname: String
   },

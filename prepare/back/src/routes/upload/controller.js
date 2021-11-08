@@ -18,15 +18,13 @@ const s3 = new aws.S3({
 //이미지 업로드, 가져오기
 
 exports.uploadImages = asyncHandler( async(req, res) =>{
-  const { params:{id}, user } = req
-  const post = await Post.findOne({id:id})
+  const { params: {id}, user} = req;
+  const files = req.files
+  const imgs = files.map(file => file.key);
 
-  await function () {
-    for (let i = 0; i<=req.files; i++) {
-      post.updateOne({$push:{images:req.files[i].filename}})
-      console.log("ok")
-    }
-  }
+  const post = await Post.findOne({id: id});
+
+  await post.updateOne({images: imgs})
 
   res.json({success:true, status:200, message:"Upload Complete"})
 })
@@ -44,6 +42,7 @@ exports.getImage_S3 = asyncHandler( async(req, res) =>{
       Key: id
     },
   }
-  res.type('png')
+  res.type('jpeg')
   await s3.getObject(streamParams.downloadParams).createReadStream().pipe(res);
 })
+

@@ -51,12 +51,8 @@ const upload_s3 = multer({
     bucket: AWS_BUCKET_NAME_IMG
   })});
 
-const upload = multer({storage:storage})
-
 const router = Router();
 
-router.post('/img/:id', requireLoggedIn, upload.array('img'),controller.uploadImages);
-router.get('/img/:id', requireLoggedIn ,controller.getImage);
-router.post('/img_s3/:id', requireLoggedIn, upload_s3.array('img'),controller.uploadImages);
-router.get('/img_s3/:id', requireLoggedIn, controller.getImage_S3 );
+router.post('/img/:id', requireLoggedIn, upload_s3.array('img'),controller.uploadImages);
+router.get('/img/:id', requireLoggedIn, controller.getImage_S3 );
 module.exports = router;

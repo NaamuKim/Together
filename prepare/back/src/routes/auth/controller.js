@@ -11,7 +11,7 @@ exports.login = asyncHandler(async (req, res) => {
   const id = exUser._id
   const followers = exUser.followers;
   const followings = exUser.followings;
-  const posts = await Post.find({writer: id});
+  const posts = await Post.find({"writer.id": id});
   if (!exUser) throw createError(404, 'User Not Found');
   if (exUser.withdrawn) throw createError(403, 'Forbidden');
   if (!exUser.authenticate(password)) throw createError(400, 'Invalid Password');

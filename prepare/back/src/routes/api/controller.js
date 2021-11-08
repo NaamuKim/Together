@@ -27,9 +27,12 @@ exports.updateUser = asyncHandler(async (req, res) => {
   const { body: $set, params: { id } } = req;
 
   delete $set.role;
-
+  const nicknameDuple = await User.findOne({nickname: $set.nickname});
+  const emailDuple = await User.findOne({email: $set.email});
   const user = await User.findById(id);
   if (!user) throw createError(404, 'User Not Found');
+  if (emailDuple) throw createError(403, 'Email Already In Use');
+  if (nicknameDuple) throw createError(403, 'Nickname Already In Use');
   await user.updateOne({ $set });
   res.json({ success: true, status: 200, message: 'User Info Updated' });
 });
@@ -39,13 +42,13 @@ exports.updateUser = asyncHandler(async (req, res) => {
 exports.createPost = asyncHandler( async(req, res) => {
   const { body, user } = req;
   const next = await db.Post.findOne().limit(1).sort({id: -1}).select('id');
-  const userId = await User.findById(user._id).select('-hashedPassword');
-  body.writer = userId._id
+  const userInfo = await db.User.findById(user._id).select(-'hashedPassword');
+  body.writer = {id:user._id, nickname: userInfo.nickname}
   if(!next) { body.id = 0 }
   else { body.id = next.id+1 };
   await db.Post.create(body);
-  res.json({ success: true, status: 201, message:`Number ${body.id} Article Posted`});
 
+  res.json({ success: true, status: 201, message:`Number ${body.id} Article Posted`});
 })
 
 exports.getPosts = asyncHandler( async(req, res) => {
@@ -64,7 +67,7 @@ exports.getMyPosts = asyncHandler( async(req, res) =>{
   const { user } = req;
   const userId = await User.findById(user._id).select(-'hashedPassword');
 
-  const documents = await db.Post.find({ writer: userId._id});
+  const documents = await db.Post.find({"writer.id": user._id});
 
   res.json({ success: true, status: 200, message:`User ${userId.id}'s documents`, data: documents})
 });
@@ -82,8 +85,8 @@ exports.updatePost = asyncHandler( async(req, res) => {
   const userId = await User.findById(user._id).select('-hashedPassword');
 
   const document = await db.Post.findOne({id:id})
-  if(document.writer == userId._id || user.role == 'admin') {
-    await document.updateOne({content:content});
+  if(document.writer.id == userId._id || user.role == 'admin') {
+    await document.updateOne({content:content, hashTags: hashTags});
     res.json({ success: true, status: 200, message:`${id} Post updated`})
   } else {
     throw createError(403);
@@ -94,7 +97,7 @@ exports.deletePost = asyncHandler( async(req, res) => {
   const { params: { id }, user} = req;
   const userId = await User.findById(user._id).select('-hashedPassword');
   const document = await db.Post.findOne({id:id})
-  if(document.writer == userId._id || user.role == 'admin') {
+  if(document.writer.id == userId._id || user.role == 'admin') {
     await document.delete();
     res.json({ success: true, status: 200, message:`${id} Post Deleted`})
   } else {
