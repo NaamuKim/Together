@@ -7,9 +7,13 @@ const postModel = new Schema({
     required: true,
     unique: true,
   },
-  title:String,
-  article:String,
-  writer:String,
+  content:String,
+  writer:{
+    id: String,
+    nickname: String
+  },
+  images:[],
+  hashTags:[],
 }, {timestamps: true});
 
 exports.Post = mongoose.model('post', postModel);

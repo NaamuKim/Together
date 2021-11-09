@@ -3,9 +3,13 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const schema = new Schema({
-  id: {
+  email: {
     type: String,
     required: true,
+    unique: true,
+  },
+  nickname: {
+    type: String,
     unique: true,
   },
   hashedPassword: String,
@@ -14,8 +18,9 @@ const schema = new Schema({
     enum: ['Admin', 'User'],
     default: 'User'
   },
-  name: String,
-});
+  followers: [ ],
+  followings: [ ],
+},{timestamps:true});
 
 schema.virtual('password')
   .set(function (password) {

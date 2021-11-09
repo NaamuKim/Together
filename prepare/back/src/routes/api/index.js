@@ -10,9 +10,9 @@ router.put('/users/:id', isAdmin, controller.updateUser);//ok 유저 정보 업�
 
 //개시판 컨트롤
 router.post( '/posts', requireLoggedIn, controller.createPost);
-router.get('/myPosts', requireLoggedIn, controller.getMyPosts);
-router.get('/posts', controller.getPosts);
-router.get('/post/:id', controller.getPost);
+router.get('/myposts', requireLoggedIn, controller.getMyPosts);
+router.get('/posts',requireLoggedIn, controller.getPosts);
+router.get('/post/:id',requireLoggedIn, controller.getPost);
 router.patch( '/update/:id', requireLoggedIn, controller.updatePost);
 router.delete( '/delete/:id', requireLoggedIn, controller.deletePost);
 
