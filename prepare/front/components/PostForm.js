@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useRef } from "react";
 
 import useInput from "../hooks/useInput";
 import { useDispatch } from "react-redux";
+import { ADD_POST_REQUEST, UPLOAD_IMAGES_REQUEST } from "../reducers/post";
 
 const PostForm = () => {
   const dispatch = useDispatch();

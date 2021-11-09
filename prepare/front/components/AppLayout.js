@@ -25,6 +25,13 @@ const AppLayout = ({ children }) => {
           >
             made by KimNaMu
           </a>
+          <a
+            href="https://github.com/CheeseLatte"
+            target="_black"
+            rel="noreferrer noopener"
+          >
+            made by CheeseLatte
+          </a>
         </Col>
       </Row>
     </div>
