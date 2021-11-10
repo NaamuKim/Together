@@ -38,7 +38,7 @@ import {
 } from "../reducers/user";
 
 function changeNicknameAPI(data) {
-  return axios.patch("/user/nickname", { nickname: data });
+  return axios.patch("/auth/nickname", { nickname: data });
 }
 
 function* changeNickname(action) {
@@ -78,7 +78,7 @@ function* loadMyInfo() {
 }
 
 function logInAPI(data) {
-  return axios.post("/user/login", data);
+  return axios.post("/auth/login", data);
 }
 
 function* logIn(action) {
@@ -116,6 +116,10 @@ function* logOut(action) {
   }
 }
 
+function signUpAPI(data) {
+  return axios.post("/auth/users");
+}
+
 function* signUp(action) {
   try {
     const result = yield call(signUpAPI, action.data);
@@ -146,6 +150,7 @@ function* watchLogOut() {
 function* watchSignUp() {
   yield takeLatest(SIGN_UP_REQUEST, signUp);
 }
+
 export default function* userSaga() {
   yield all([
     fork(watchRemoveFollower),

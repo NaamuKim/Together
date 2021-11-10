@@ -1,9 +1,12 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Head from "next/head";
+import Router from "next/router";
 import AppLayout from "../components/AppLayout";
 import { Button, Checkbox, Form, Input } from "antd";
 import styled from "@emotion/styled";
 import useInput from "../hooks/useinput";
+import { useDispatch } from "react-redux";
+import { SIGN_UP_REQUEST } from "../reducers/user";
 
 const ErrorMessage = styled.div`
   color: darkred;
@@ -25,6 +28,21 @@ const InputStyle = styled(Input)`
 `;
 
 const Signup = () => {
+  const dispatch = useDispatch();
+  const { signUpLoading, signUpDone, signUpError, me } = useSelector(
+    (state) => state.user
+  );
+  useEffect(() => {
+    if (me && me.id) {
+      Router.replace("/");
+    }
+  }, [me && me.id]);
+  useEffect(() => {
+    if (signUpDone) {
+      Router.replace("/");
+    }
+  }, [signUpDone]);
+
   const [email, onChangeEmail] = useInput("");
   const [nickname, onChangeNickname] = useInput("");
   const [password, onChangePassword] = useInput("");
@@ -51,6 +69,10 @@ const Signup = () => {
     if (!term) {
       return setTermError(true);
     }
+    dispatch({
+      type: SIGN_UP_REQUEST,
+      data: { email, password, passwordCheck, term },
+    });
   }, [email, password, passwordCheck, term]);
 
   return (
