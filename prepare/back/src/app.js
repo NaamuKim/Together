@@ -17,6 +17,7 @@ app.use(
   })
 );
 app.use(router);
+g;
 app.use(notFound);
 app.use(errorHandler);
 
