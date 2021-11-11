@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import Head from "next/head";
 import Router from "next/router";
+import { useSelector } from "react-redux";
 import AppLayout from "../components/AppLayout";
 import { Button, Checkbox, Form, Input } from "antd";
 import styled from "@emotion/styled";
@@ -29,9 +30,7 @@ const InputStyle = styled(Input)`
 
 const Signup = () => {
   const dispatch = useDispatch();
-  const { signUpLoading, signUpDone, signUpError, me } = useSelector(
-    (state) => state.user
-  );
+  const { signUpDone, signUpError, me } = useSelector((state) => state.user);
   useEffect(() => {
     if (me && me.id) {
       Router.replace("/");
@@ -71,7 +70,7 @@ const Signup = () => {
     }
     dispatch({
       type: SIGN_UP_REQUEST,
-      data: { email, password, passwordCheck, term },
+      data: { email, password, nickname },
     });
   }, [email, password, passwordCheck, term]);
 
@@ -80,7 +79,7 @@ const Signup = () => {
       <Head>
         <title>회원가입 | Together</title>
       </Head>
-      <Form onSubmit={onSubmit}>
+      <Form onFinish={onSubmit}>
         <div>
           <Label htmlFor="user-email">이메일</Label>
           <br />

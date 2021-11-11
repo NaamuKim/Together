@@ -150,3 +150,5 @@ const reducer = (state = initialState, action) =>
         break;
     }
   });
+
+export default reducer;
