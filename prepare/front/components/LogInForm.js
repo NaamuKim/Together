@@ -1,7 +1,9 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import styled from "@emotion/styled";
 import Link from "next/link";
 import useInput from "../hooks/useinput";
+import { useDispatch, useSelector } from "react-redux";
+import { loginRequestAction } from "../reducers/user";
 
 const Form = styled.form`
   padding: 10px;
@@ -52,10 +54,20 @@ const Button = styled.button`
 `;
 
 const LogInForm = () => {
+  const dispatch = useDispatch();
+  const { logInLoading, logInError } = useSelector((state) => state.user);
   const [email, onChangeEmail] = useInput("");
   const [password, onChangePassword] = useInput("");
 
-  const onSubmitForm = useCallback(() => {}, []);
+  const onSubmitForm = useCallback(() => {
+    dispatch(loginRequestAction({ email, password }));
+  }, [email, password]);
+
+  useEffect(() => {
+    if (logInError) {
+      alert(logInError);
+    }
+  }, [logInError]);
 
   return (
     <Form onSubmit={onSubmitForm}>

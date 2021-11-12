@@ -26,7 +26,7 @@ const AppLayout = ({ children }) => {
             made by KimNaMu
           </a>
           <a
-            href="https://github.com/CheeseLatte"
+            href="https://github.com/CheezeLatte"
             target="_black"
             rel="noreferrer noopener"
           >
