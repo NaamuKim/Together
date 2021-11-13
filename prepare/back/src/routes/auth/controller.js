@@ -4,11 +4,11 @@ const { User, RefreshToken, Post } = require('../../models');
 const { signAccessToken, signRefreshToken, verifyRefreshToken } = require('../../utils/jwt');
 
 exports.login = asyncHandler(async (req, res) => {
-  const { body: { email, password }, user } = req;
+  const { body: { nickname, password }, user } = req;
 
-  const exUser = await User.findOne({ email:email});
-  const nickname = exUser.nickname;
+  const exUser = await User.findOne({ nickname:nickname});
   const id = exUser._id
+  const email = exUser.email;
   const followers = exUser.followers;
   const followings = exUser.followings;
   const posts = await Post.find({"writer.id": id});
