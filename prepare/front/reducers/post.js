@@ -3,6 +3,7 @@ import produce from "immer";
 export const initialState = {
   mainPosts: [],
   imagePaths: [],
+  hasMorePosts: true,
   loadPostsLoading: false,
   loadPostsDone: false,
   loadPostsError: null,

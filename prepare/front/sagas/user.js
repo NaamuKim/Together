@@ -47,7 +47,11 @@ function* logIn(action) {
       type: LOG_IN_SUCCESS,
       data: result.data,
     });
-    alert(data.message);
+    console.log("res.data.accessToken: " + result.data);
+    axios.defaults.headers.common["Authorization"] =
+      "Bearer " + result.data.accessToken;
+    localStorage.setItem("accessToken", result.data.accessToken);
+    localStorage.setItem("refreshToken", result.data.refreshToken);
   } catch (err) {
     console.error(err);
     yield put({

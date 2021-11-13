@@ -62,7 +62,3 @@ export const Indicator = styled.div`
     font-size: 15px;
   }
 `;
-export const GlobalStyle = Global`
-.slick-slide{
-  display:inline-block;
-}`;

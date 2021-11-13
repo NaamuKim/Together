@@ -8,6 +8,8 @@ import {
   UPLOAD_IMAGES_SUCCESS,
   UPLOAD_IMAGES_FAILURE,
   LOAD_POSTS_REQUEST,
+  LOAD_POSTS_SUCCESS,
+  LOAD_POSTS_FAILURE,
 } from "../reducers/post";
 
 function addPostAPI(data) {
@@ -50,7 +52,25 @@ function* uploadImages(action) {
   }
 }
 
-function loadPostsAPI() {}
+function loadPostsAPI(lastId) {
+  return axios.get(`/posts?lastId=${lastId || 0}`);
+}
+
+function* loadPosts(action) {
+  try {
+    const result = yield call(loadPostsAPI, action.lastId);
+    yield put({
+      type: LOAD_POSTS_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: LOAD_POSTS_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
 
 function* watchAddPost() {
   yield takeLatest(ADD_POST_REQUEST, addPost);
