@@ -63,6 +63,21 @@ exports.getPosts = asyncHandler( async(req, res) => {
   res.json({ total, page: _page, limit: _limit, data: documents });
 });
 
+exports.getNexts = asyncHandler(async(req, res)=> {
+  const {params:{id}, query:{limit, page}} = req
+  console.log(id)
+  const _page = +(page || 1);
+  const _limit = +(limit || 10);
+  const skip = (page - 1) * limit;
+  const idConfirm = await db.Post.find({"id":id});
+  const documents = await db.Post.find({"id":{$gt:id}}).skip(skip).limit(_limit);
+  if (idConfirm.length == 0)
+    throw createError(403, `${id} Post Not Found`);
+  if (documents.length == 0)
+    throw createError(403, `${id} Is The Last Post`);
+  res.json({page: _page, limit: _limit, data: documents, lastId: documents.slice(-1)[0].id});
+})
+
 exports.getMyPosts = asyncHandler( async(req, res) =>{
   const { user } = req;
   const userId = await User.findById(user._id).select(-'hashedPassword');
@@ -104,3 +119,4 @@ exports.deletePost = asyncHandler( async(req, res) => {
     throw createError(403);
   }
 });
+
