@@ -12,6 +12,7 @@ router.put('/users/:id', isAdmin, controller.updateUser);//ok 유저 정보 업�
 router.get('/myposts', requireLoggedIn, controller.getMyPosts);
 router.get('/posts', controller.getPosts);
 router.get('/post/:id', controller.getPost);
+router.get('/nexts/:id', controller.getNexts);
 router.post( '/posts', requireLoggedIn, controller.createPost);
 router.patch( '/update/:id', requireLoggedIn, controller.updatePost);
 router.delete( '/delete/:id', requireLoggedIn, controller.deletePost);
