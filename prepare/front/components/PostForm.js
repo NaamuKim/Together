@@ -1,11 +1,12 @@
 import { Button, Form, Input } from "antd";
 import React, { useCallback, useEffect, useRef } from "react";
 import useInput from "../hooks/useInput";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ADD_POST_REQUEST, UPLOAD_IMAGES_REQUEST } from "../reducers/post";
 
 const PostForm = () => {
   const dispatch = useDispatch();
+  const { imagePaths, addPostDone } = useSelector((state) => state.post);
   const [text, onChangeText, setText] = useInput("");
 
   const onSubmit = useCallback(() => {
@@ -19,6 +20,7 @@ const PostForm = () => {
   const onClickImageUpload = useCallback(() => {
     imageInput.current.click();
   }, [imageInput.current]);
+
   const onChangeImages = useCallback((e) => {
     console.log("images", e.target.files);
     const imageFormData = new FormData();
