@@ -2,6 +2,7 @@ const asyncHandler = require('express-async-handler');
 const createError = require('http-errors');
 const { User, RefreshToken, Post } = require('../../models');
 const { signAccessToken, signRefreshToken, verifyRefreshToken } = require('../../utils/jwt');
+const { list } = require("pm2");
 
 exports.login = asyncHandler(async (req, res) => {
   const { body: { email, password }, user } = req;
@@ -11,6 +12,7 @@ exports.login = asyncHandler(async (req, res) => {
   const id = exUser._id
   const followers = exUser.followers;
   const followings = exUser.followings;
+  const likedPosts = exUser.likedPosts;
   const posts = await Post.find({"writer.id": id});
   if (!exUser) throw createError(404, 'User Not Found');
   if (exUser.withdrawn) throw createError(403, 'Forbidden');
@@ -21,9 +23,9 @@ exports.login = asyncHandler(async (req, res) => {
 
   await RefreshToken.updateToken(exUser._id, refreshToken);
   res.json({ success: true, status:200, message: 'Login Success',
-    data: {
-    accessToken, refreshToken, nickname:nickname, id:id, email:email, followers: followers, followings: followings, posts: posts
-  }});
+    data: { me: {nickname:nickname, id:id, email:email, followers: followers, followings: followings, likedPosts: likedPosts, posts: posts},
+      accessToken, refreshToken
+    }});
 });
 
 exports.logout = asyncHandler(async (req, res) => {
@@ -35,10 +37,10 @@ exports.logout = asyncHandler(async (req, res) => {
 
 exports.getMe = asyncHandler(async (req, res) => {
   const { user } = req;
-  const data = await User.findById(user._id).select('-hashedPassword');
+  const data = await User.findById(user._id);
   const posts = await Post.find({writer:user._id})
   res.json({ success: true, status: 200, message: `User ${data.nickname}'s Info`, data:{
-    nickname:data.nickname, id:data.id, email:data.email, followers: data.followers, followings: data.followings, posts: posts } });
+      me:{nickname:data.nickname, id:data.id, email:data.email, followers: data.followers, followings: data.followings, likedPosts: data.likedPosts, posts: posts }} });
 });
 
 exports.updateNickname = asyncHandler( async (req, res) =>{
@@ -64,7 +66,7 @@ exports.updateMe = asyncHandler(async (req, res) => {
 exports.refreshToken = asyncHandler(async (req, res) => {
   const oldToken = req.headers['x-refresh-token'];
   console.log(oldToken);
-  
+
   if (!oldToken) throw createError(401, 'Token Required');
 
   const id = await verifyRefreshToken(oldToken);
