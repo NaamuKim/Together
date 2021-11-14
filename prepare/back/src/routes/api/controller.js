@@ -120,3 +120,32 @@ exports.deletePost = asyncHandler( async(req, res) => {
   }
 });
 
+//좋아요 관련
+
+exports.addLikes = asyncHandler(async(req, res) =>{
+  const { params: { id }, user} = req
+  const postData = await db.Post.findOne({id:id});
+  const userInfo = await db.User.findById(user._id);
+  if(postData.likedUsers.includes(user._id) && userInfo.likedPosts.includes(id))
+  { throw createError(403, 'User Already Liked Post'); }
+
+  await postData.updateOne({$push:{likedUsers: user._id}});
+  await userInfo.updateOne({$push:{likedPosts: id}});
+
+  res.json({status: 200, success: true, message:`User ${userInfo.nickname} Liked Post ${id}`})
+
+})
+
+exports.removeLikes = asyncHandler(async(req, res)=> {
+  const { params: { id }, user} = req;
+  const postData = await db.Post.findOne({id:id});
+  const userInfo = await db.User.findById(user._id);
+
+  if(!postData.likedUsers.includes(user._id) && !userInfo.likedPosts.includes(id))
+    throw createError(403, 'Nothing To Unlike');
+  await postData.updateOne({$pull:{likedUsers: user._id}});
+  await userInfo.updateOne({$pull:{likedPosts: id}});
+
+  res.json({status: 200, success: true, message:`User ${user.nickname} Unliked Post ${id}`})
+
+})
