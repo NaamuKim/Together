@@ -60,6 +60,9 @@ export const loginRequestAction = (data) => ({
   data,
 });
 
+export const logoutRequestAction = () => ({
+  type: LOG_OUT_REQUEST,
+});
 const reducer = (state = initialState, action) =>
   produce(state, (draft) => {
     switch (action.type) {
@@ -103,7 +106,7 @@ const reducer = (state = initialState, action) =>
         break;
       case LOG_IN_FAILURE:
         draft.logInLoading = false;
-        draft.logInError = action.error;
+        draft.logInError = action.error.message;
         break;
       case LOG_OUT_REQUEST:
         draft.logOutLoading = true;

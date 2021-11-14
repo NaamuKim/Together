@@ -1,15 +1,13 @@
 import React, { useCallback, useEffect } from "react";
 import styled from "@emotion/styled";
+import { Form } from "antd";
 import Link from "next/link";
 import useInput from "../hooks/useinput";
 import { useDispatch, useSelector } from "react-redux";
 import { loginRequestAction } from "../reducers/user";
 
-const Form = styled.form`
+const FormWrapper = styled(Form)`
   padding: 10px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
 `;
 
 const EmailDiv = styled.div`
@@ -59,18 +57,18 @@ const LogInForm = () => {
   const [email, onChangeEmail] = useInput("");
   const [password, onChangePassword] = useInput("");
 
-  const onSubmitForm = useCallback(() => {
-    dispatch(loginRequestAction({ email, password }));
-  }, [email, password]);
-
   useEffect(() => {
     if (logInError) {
       alert(logInError);
     }
   }, [logInError]);
 
+  const onSubmitForm = useCallback(() => {
+    dispatch(loginRequestAction({ email, password }));
+  }, [email, password]);
+
   return (
-    <Form onSubmit={onSubmitForm}>
+    <FormWrapper onFinish={onSubmitForm}>
       <EmailDiv>
         <Label htmlFor="user-id">이메일</Label>
         <br />
@@ -94,14 +92,16 @@ const LogInForm = () => {
         />
       </PasswordDiv>
       <ButtonWrapper>
-        <Button type="primary">로그인</Button>
+        <Button type="primary" htmlType="submit" loading={logInLoading}>
+          로그인
+        </Button>
         <Button>
           <Link href="signup">
             <a>회원가입</a>
           </Link>
         </Button>
       </ButtonWrapper>
-    </Form>
+    </FormWrapper>
   );
 };
 

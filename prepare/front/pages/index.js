@@ -5,6 +5,7 @@ import Head from "next/head";
 import { useDispatch, useSelector } from "react-redux";
 import { LOAD_POSTS_REQUEST } from "../reducers/post";
 import PostCard from "../components/PostCard";
+import { LOG_OUT_REQUEST } from "../reducers/user";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -12,7 +13,13 @@ const Home = () => {
   const { mainPosts, hasMorePosts, loadPostsLoading } = useSelector(
     (state) => state.post
   );
-
+  // useEffect(() => {
+  //   if (!localStorage.getItem("accessToken")) {
+  //     dispatch({
+  //       type: LOG_OUT_REQUEST,
+  //     });
+  //   }
+  // });
   useEffect(() => {
     function onScroll() {
       if (

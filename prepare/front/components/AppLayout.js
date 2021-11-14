@@ -4,15 +4,17 @@ import { Row, Col } from "antd";
 import Global from "./Global";
 import Header from "./Header";
 import LogInForm from "./LogInForm";
+import { useSelector } from "react-redux";
 
 const AppLayout = ({ children }) => {
+  const { me } = useSelector((state) => state.user);
   return (
     <div>
       <Global />
       <Header />
       <Row gutter={8}>
         <Col xs={24} md={6}>
-          <LogInForm />
+          {me ? <UserProfile /> : <LogInForm />}
         </Col>
         <Col xs={24} md={12}>
           {children}

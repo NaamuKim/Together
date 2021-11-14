@@ -47,11 +47,12 @@ function* logIn(action) {
       type: LOG_IN_SUCCESS,
       data: result.data,
     });
+    console.log(result);
     console.log("res.data.accessToken: " + result.data);
-    axios.defaults.headers.common["Authorization"] =
-      "Bearer " + result.data.accessToken;
-    localStorage.setItem("accessToken", result.data.accessToken);
-    localStorage.setItem("refreshToken", result.data.refreshToken);
+    axios.defaults.headers.common["x-access-token"] =
+      result.data.data.refreshToken;
+    localStorage.setItem("accessToken", result.data.data.accessToken);
+    localStorage.setItem("refreshToken", result.data.data.refreshToken);
   } catch (err) {
     console.error(err);
     yield put({
@@ -62,7 +63,7 @@ function* logIn(action) {
 }
 
 function logOutAPI(data) {
-  return axios.post("/user/logout", data);
+  return axios.post("/auth/logout");
 }
 
 function* logOut(action) {
