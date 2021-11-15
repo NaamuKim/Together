@@ -12,21 +12,37 @@ import PropTypes from "prop-types";
 import PostImages from "./PostImages";
 import styled from "@emotion/styled";
 import CommentForm from "./CommentForm";
+import { useDispatch, useSelector } from "react-redux";
+import { LIKE_POST_REQUEST } from "../reducers/post";
 
 const StyledDiv = styled.div`
   margin-bottom: 20px;
 `;
 
 const PostCard = ({ post }) => {
+  const dispatch = useDispatch();
+  const id = useSelector((state) => state.user);
   const [liked, setLiked] = useState(false);
   const [commentFormOpened, setCommentFormOpened] = useState(false);
 
   const onLike = useCallback(() => {
-    setLiked(true);
-  }, []);
+    if (!id) {
+      return alert("로그인이 필요합니다");
+    }
+    return dispatch({
+      type: LIKE_POST_REQUEST,
+      data: post.id,
+    });
+  }, [id]);
 
   const onUnlike = useCallback(() => {
-    setLiked(false);
+    if (!id) {
+      return alert("로그인이 필요합니다");
+    }
+    dispatch({
+      type: UNLIKE_POST_REQUEST,
+      data: post.id,
+    });
   }, []);
 
   const onToggleComment = useCallback(() => {
