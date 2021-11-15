@@ -5,6 +5,7 @@ import Global from "./Global";
 import Header from "./Header";
 import LogInForm from "./LogInForm";
 import { useSelector } from "react-redux";
+import UserProfile from "./UserProfile";
 
 const AppLayout = ({ children }) => {
   const { me } = useSelector((state) => state.user);

@@ -20,7 +20,7 @@ const UserProfile = () => {
             <a>
               게시물
               <br />
-              {me.Posts.length}
+              {me.posts.length}
             </a>
           </Link>
         </div>,
@@ -29,7 +29,7 @@ const UserProfile = () => {
             <a>
               팔로잉
               <br />
-              {me.Followings.length}
+              {me.followings.length}
             </a>
           </Link>
         </div>,
@@ -38,7 +38,7 @@ const UserProfile = () => {
             <a>
               팔로워
               <br />
-              {me.Followers.length}
+              {me.followers.length}
             </a>
           </Link>
         </div>,

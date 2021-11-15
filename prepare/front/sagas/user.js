@@ -45,11 +45,10 @@ function* logIn(action) {
     const result = yield call(logInAPI, action.data);
     yield put({
       type: LOG_IN_SUCCESS,
-      data: result.data,
+      data: result.data.data.me,
     });
-    console.log(result);
-    console.log("res.data.accessToken: " + result.data);
-    axios.defaults.headers.common["x-access-token"] =
+    console.log(result.data);
+    axios.defaults.headers.common["x-refresh-token"] =
       result.data.data.refreshToken;
     localStorage.setItem("accessToken", result.data.data.accessToken);
     localStorage.setItem("refreshToken", result.data.data.refreshToken);
@@ -63,7 +62,7 @@ function* logIn(action) {
 }
 
 function logOutAPI(data) {
-  return axios.post("/auth/logout");
+  return axios.get("/auth/logout");
 }
 
 function* logOut(action) {
