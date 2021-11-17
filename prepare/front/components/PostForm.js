@@ -9,12 +9,23 @@ const PostForm = () => {
   const { imagePaths, addPostDone } = useSelector((state) => state.post);
   const [text, onChangeText, setText] = useInput("");
 
+  useEffect(() => {
+    if (addPostDone) {
+      setText("");
+    }
+  }, [addPostDone]);
+
   const onSubmit = useCallback(() => {
     if (!text || text.trim()) {
       return alert("게시글을 작성하세요.");
     }
+    const formData = new FormData();
+    imagePaths.forEach((p) => {
+      formData.append("image", p);
+    });
+    formData.append("context", text);
     return dispatch({ type: ADD_POST_REQUEST, data: data });
-  }, [text]);
+  }, [text, imagePaths]);
 
   const imageInput = useRef();
   const onClickImageUpload = useCallback(() => {
@@ -32,6 +43,7 @@ const PostForm = () => {
       data: imageFormData,
     });
   }, []);
+
   return (
     <Form
       style={{ margin: "10px 0 20px" }}

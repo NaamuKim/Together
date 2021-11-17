@@ -25,6 +25,7 @@ const Profile = () => {
     console.error(followerError || followingError);
     return <div>팔로잉/팔로워 로딩 에러 발생</div>;
   }
+
   return (
     <>
       <Head>
@@ -32,8 +33,13 @@ const Profile = () => {
       </Head>
       <AppLayout>
         <NicknameEditForm />
-        <FollowList header="팔로잉 목록" data={followingList} />
-        <FollowList header="팔로워" data={followerList} />
+        <FollowList header="팔로잉 목록" data={followingsData} />
+        <FollowList
+          header="팔로워"
+          data={followerList}
+          onClickMore={loadMoreFollowers}
+          loading={!followersData && !followerError}
+        />
       </AppLayout>
     </>
   );
