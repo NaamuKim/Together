@@ -214,9 +214,6 @@ const reducer = (state = initialState, action) =>
         draft.changeNicknameLoading = false;
         draft.changeNicknameError = action.error;
         break;
-      // case ADD_POST_TO_ME:
-      //   draft.me.posts.unshift({ id: action.data });
-      //   break;
       default:
         break;
     }

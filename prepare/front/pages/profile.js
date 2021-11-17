@@ -1,20 +1,30 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import AppLayout from "../components/AppLayout";
 import Head from "next/head";
+import axios from "axios";
 import NicknameEditForm from "../components/NicknameEditForm";
 import FollowList from "../components/FollowList";
+import { useSelector } from "react-redux";
 
 const Profile = () => {
-  const followerList = [
-    { nickname: "나무" },
-    { nickname: "치즈라떼" },
-    { nickname: "대형곰" },
-  ];
-  const followingList = [
-    { nickname: "나무" },
-    { nickname: "치즈라떼" },
-    { nickname: "대형곰" },
-  ];
+  const { me } = useSelector((state) => state.user);
+  const [followersLimit, setFollowersLimit] = useState(3);
+  const [followingsLimit, setFollowingsLimit] = useState(3);
+
+  useEffect(() => {
+    if (!(me && me.id)) {
+      Router.push("/");
+    }
+  }, [me && me.id]);
+
+  if (!me) {
+    return "내 정보 로딩중...";
+  }
+
+  if (followerError || followingError) {
+    console.error(followerError || followingError);
+    return <div>팔로잉/팔로워 로딩 에러 발생</div>;
+  }
   return (
     <>
       <Head>
@@ -28,4 +38,5 @@ const Profile = () => {
     </>
   );
 };
+
 export default Profile;
