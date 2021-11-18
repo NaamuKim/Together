@@ -53,6 +53,6 @@ const upload_s3 = multer({
 
 const router = Router();
 
-router.post('/img/:id', requireLoggedIn, upload_s3.array('img'),controller.uploadImages);
+router.post('/img', requireLoggedIn, upload_s3.array('img'),controller.uploadImages);
 router.get('/img/:id', controller.getImage_S3 );
 module.exports = router;
