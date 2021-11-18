@@ -184,7 +184,7 @@ function* logIn(action) {
     });
     console.log(result.data);
     axios.defaults.headers.common["x-access-token"] =
-      result.data.data.refreshToken;
+      result.data.data.accessToken;
     localStorage.setItem("accessToken", result.data.data.accessToken);
     localStorage.setItem("refreshToken", result.data.data.refreshToken);
   } catch (err) {
@@ -197,7 +197,7 @@ function* logIn(action) {
 }
 
 function logOutAPI(data) {
-  return axios.get("/auth/logout");
+  return axios.get("/auth/logout", data);
 }
 
 function* logOut(action) {

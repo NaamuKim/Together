@@ -63,25 +63,4 @@ const Home = () => {
   );
 };
 
-export const getServerSideProps = wrapper.getServerSideProps(
-  async (context) => {
-    const refreshToken = context.req
-      ? context.req.headers.common["x-refresh-token"]
-      : "";
-    axios.defaults.headers.common["x-refresh-token"] = "";
-    console.log(refreshToken);
-    if (context.req && refreshToken) {
-      axios.defaults.headers.common["x-refresh-token"] = refreshToken;
-    }
-    context.store.dispatch({
-      type: LOAD_MY_INFO_REQUEST,
-    });
-    context.store.dispatch({
-      type: LOAD_POSTS_REQUEST,
-    });
-    context.store.dispatch(END);
-    await context.store.sagaTask.toPromise();
-  }
-);
-
 export default Home;

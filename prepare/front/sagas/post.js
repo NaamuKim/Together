@@ -60,12 +60,12 @@ function* unlikePost(action) {
 }
 
 function addPostAPI(data) {
-  return axios.post("/post", data);
+  return axios.post("/api/posts", data);
 }
 
 function* addPost(action) {
   try {
-    const result = yield call(addPostAPI, action, data);
+    const result = yield call(addPostAPI, action.data);
     yield put({
       type: ADD_POST_SUCCESS,
       data: result.data,
@@ -81,15 +81,15 @@ function* addPost(action) {
 }
 
 function uploadImagesAPI(data) {
-  return axios.post("/post", data);
+  return axios.post("/upload/img", data);
 }
 
 function* uploadImages(action) {
   try {
-    const result = yield call(uploadImagesAPI, action, data);
+    const result = yield call(uploadImagesAPI, action.data);
     yield put({
       type: UPLOAD_IMAGES_SUCCESS,
-      data: result.data,
+      data: result.data.message.imagePaths,
     });
   } catch (err) {
     console.error(err);
