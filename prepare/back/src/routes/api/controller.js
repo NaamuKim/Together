@@ -44,7 +44,7 @@ exports.createPost = asyncHandler( async(req, res) => {
   const next = await db.Post.findOne().limit(1).sort({id: -1}).select('id');
   const userInfo = await db.User.findById(user._id).select(-'hashedPassword');
   body.writer = {id:user._id, nickname: userInfo.nickname}
-  body.hashTags = body.content.match(/#[^\s#]+/g);
+  if(body.content.match(/#[^\s#]+/g)) body.hashTags = body.content.match(/#[^\s#]+/g);;
   body.content = body.content.replace(/#[^\s#]+/g,"");
 
   if(!next) { body.id = 0 }
