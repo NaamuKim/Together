@@ -18,15 +18,9 @@ const s3 = new aws.S3({
 //이미지 업로드, 가져오기
 
 exports.uploadImages = asyncHandler( async(req, res) =>{
-  const { params: {id}, user} = req;
   const files = req.files
   const imgs = files.map(file => file.key);
-
-  const post = await Post.findOne({id: id});
-
-  await post.updateOne({images: imgs})
-
-  res.json({success:true, status:200, message:"Upload Complete"})
+  res.json({success:true, status:200, message:"Upload Complete", message: {imagePaths:imgs} })
 })
 
 exports.getImage = asyncHandler( async (req, res) => {
