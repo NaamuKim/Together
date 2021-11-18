@@ -110,6 +110,7 @@ function* loadFollowings(action) {
     });
   }
 }
+
 function changeNicknameAPI(data) {
   return axios.patch("/auth/nickname", { nickname: data });
 }
@@ -182,7 +183,7 @@ function* logIn(action) {
       data: result.data.data.me,
     });
     console.log(result.data);
-    axios.defaults.headers.common["x-refresh-token"] =
+    axios.defaults.headers.common["x-access-token"] =
       result.data.data.refreshToken;
     localStorage.setItem("accessToken", result.data.data.accessToken);
     localStorage.setItem("refreshToken", result.data.data.refreshToken);

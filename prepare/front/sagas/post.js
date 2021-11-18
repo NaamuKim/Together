@@ -16,6 +16,7 @@ import {
   LOAD_POSTS_REQUEST,
   LOAD_POSTS_SUCCESS,
   LOAD_POSTS_FAILURE,
+  ADD_POST_TO_ME,
 } from "../reducers/post";
 
 function likePostAPI(data) {
@@ -69,6 +70,7 @@ function* addPost(action) {
       type: ADD_POST_SUCCESS,
       data: result.data,
     });
+    yield put({ type: ADD_POST_TO_ME, data: result.data.id });
   } catch (err) {
     console.error(err);
     yield put({
@@ -99,7 +101,7 @@ function* uploadImages(action) {
 }
 
 function loadPostsAPI(lastId) {
-  return axios.get(`/posts?lastId=${lastId || 0}`);
+  return axios.get(`/api/nexts/${lastId}`);
 }
 
 function* loadPosts(action) {

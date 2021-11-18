@@ -1,4 +1,5 @@
 import produce from "immer";
+import { ADD_POST_TO_ME, REMOVE_POST_OF_ME } from "./post";
 
 export const initialState = {
   loadMyInfoLoading: false, // 내 정보 로딩 시도중
@@ -213,6 +214,12 @@ const reducer = (state = initialState, action) =>
       case CHANGE_NICKNAME_FAILURE:
         draft.changeNicknameLoading = false;
         draft.changeNicknameError = action.error;
+        break;
+      case ADD_POST_TO_ME:
+        draft.me.posts.unshift({ id: action.data });
+        break;
+      case REMOVE_POST_OF_ME:
+        draft.me.post = draft.me.posts.filter((v) => v.id !== action.data);
         break;
       default:
         break;
