@@ -185,8 +185,6 @@ function* logIn(action) {
     console.log(result.data);
     axios.defaults.headers.common["x-access-token"] =
       result.data.data.accessToken;
-    localStorage.setItem("accessToken", result.data.data.accessToken);
-    localStorage.setItem("refreshToken", result.data.data.refreshToken);
   } catch (err) {
     console.error(err);
     yield put({

@@ -13,7 +13,8 @@ import PostImages from "./PostImages";
 import styled from "@emotion/styled";
 import CommentForm from "./CommentForm";
 import { useDispatch, useSelector } from "react-redux";
-import { LIKE_POST_REQUEST } from "../reducers/post";
+import { LIKE_POST_REQUEST, UNLIKE_POST_REQUEST } from "../reducers/post";
+import FollowButton from "./FollowButton";
 
 const StyledDiv = styled.div`
   margin-bottom: 20px;
@@ -54,7 +55,7 @@ const PostCard = ({ post }) => {
       <Card
         cover={post.Images[0] && <PostImages images={post.Images} />}
         actions={[
-          <RetweetOutlined key="retweet" onClick={onShare} />,
+          <RetweetOutlined key="retweet" />,
           liked ? (
             <HeartTwoTone
               twoToneColor="#eb2f96"
@@ -80,9 +81,7 @@ const PostCard = ({ post }) => {
                 {id && post.User.id === id ? (
                   <>
                     <Button>수정</Button>
-                    <Button type="danger" onClick={onRemovePost}>
-                      삭제
-                    </Button>
+                    <Button type="danger">삭제</Button>
                   </>
                 ) : (
                   <Button>신고</Button>

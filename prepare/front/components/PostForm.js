@@ -24,12 +24,11 @@ const PostForm = () => {
     if (!text || !text.trim()) {
       return alert("게시글을 작성하세요.");
     }
-    const formData = new FormData();
-    imagePaths.forEach((p) => {
-      formData.append("images", p);
+
+    return dispatch({
+      type: ADD_POST_REQUEST,
+      data: { images: imagePaths, content: text },
     });
-    formData.append("content", text);
-    return dispatch({ type: ADD_POST_REQUEST, data: formData });
   }, [text, imagePaths]);
 
   const imageInput = useRef();
