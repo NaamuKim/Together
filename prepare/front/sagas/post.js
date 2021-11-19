@@ -102,7 +102,7 @@ function* uploadImages(action) {
 }
 
 function loadPostsAPI(lastId) {
-  return axios.get(`/api/nexts/${lastId}`);
+  return axios.get(`/api/nexts/${lastId || 0}`);
 }
 
 function* loadPosts(action) {
@@ -110,7 +110,7 @@ function* loadPosts(action) {
     const result = yield call(loadPostsAPI, action.lastId);
     yield put({
       type: LOAD_POSTS_SUCCESS,
-      data: result.data,
+      data: result.data.data,
     });
   } catch (err) {
     console.error(err);

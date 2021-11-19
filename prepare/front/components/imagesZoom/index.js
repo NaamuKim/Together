@@ -10,6 +10,7 @@ import {
   Overlay,
   SlickWrapper,
 } from "./styles";
+import { backUrl } from "../../config/config";
 
 const ImagesZoom = ({ images, onClose }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -31,8 +32,8 @@ const ImagesZoom = ({ images, onClose }) => {
             slidesToScroll={1}
           >
             {images.map((v) => (
-              <ImgWrapper key={v.src}>
-                <img src={`http://localhost:8080/${v.src}`} alt={v.src} />
+              <ImgWrapper key={v}>
+                <img src={`${backUrl}/upload/img/${v}`} alt={v} />
               </ImgWrapper>
             ))}
           </Slick>
@@ -48,7 +49,7 @@ const ImagesZoom = ({ images, onClose }) => {
 };
 
 ImagesZoom.propTypes = {
-  images: PropTypes.arrayOf(PropTypes.object).isRequired,
+  images: PropTypes.arrayOf(PropTypes.string).isRequired,
   onClose: PropTypes.func.isRequired,
 };
 
