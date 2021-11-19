@@ -1,5 +1,6 @@
 import { all, fork, put, takeLatest, call } from "redux-saga/effects";
 import axios from "axios";
+import cookie from "react-cookies";
 
 import {
   LOG_IN_REQUEST,
@@ -131,13 +132,17 @@ function* changeNickname(action) {
   }
 }
 
-function loadMyInfoAPI() {
-  return axios.get("/auth/me");
+function loadMyInfoAPI(data) {
+  return axios.get("/auth/me", {
+    headers: {
+      Authorization: data,
+    },
+  });
 }
 
-function* loadMyInfo() {
+function* loadMyInfo(action) {
   try {
-    const result = yield call(loadMyInfoAPI);
+    const result = yield call(loadMyInfoAPI, action.data);
     yield put({
       type: LOAD_MY_INFO_SUCCESS,
       data: result.data,
@@ -185,6 +190,16 @@ function* logIn(action) {
     console.log(result.data);
     axios.defaults.headers.common["x-access-token"] =
       result.data.data.accessToken;
+    const accessToken = result.data.data.accessToken;
+    const refreshToken = result.data.data.refreshToken;
+
+    cookie.save("accessToken", accessToken, {
+      path: "/",
+    });
+    cookie.save("refreshToken", refreshToken, {
+      path: "/",
+    });
+    console.log(cookie);
   } catch (err) {
     console.error(err);
     yield put({

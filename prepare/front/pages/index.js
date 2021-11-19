@@ -63,4 +63,25 @@ const Home = () => {
   );
 };
 
+export const getServerSideProps = wrapper.getServerSideProps(
+  async (context) => {
+    const cookies = context.req ? context.req.headers.cookie : "";
+    axios.defaults.headers.Cookie = "";
+    console.log(cookies);
+    if (context.req && cookies) {
+      if (cookies["accessToken"]) {
+        context.store.dispatch({
+          type: LOAD_MY_INFO_REQUEST,
+          data: cookies["accessToken"],
+        });
+      }
+    }
+    context.store.dispatch({
+      type: LOAD_POSTS_REQUEST,
+    });
+    context.store.dispatch(END);
+    await context.store.sagaTask.toPromise();
+  }
+);
+
 export default Home;
