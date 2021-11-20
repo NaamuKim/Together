@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import Slick from "react-slick";
 import {
   CloseBtn,
-  GlobalStyle,
   Header,
   ImgWrapper,
   Indicator,

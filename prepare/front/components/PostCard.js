@@ -32,6 +32,7 @@ moment.locale("ko");
 
 const PostCard = ({ post }) => {
   const dispatch = useDispatch();
+  const { removePostLoading } = useSelector((state) => state.post);
   const id = useSelector((state) => state.user.me?.id);
   const [commentFormOpened, setCommentFormOpened] = useState(false);
 
@@ -101,7 +102,13 @@ const PostCard = ({ post }) => {
                 {id && post.writer.id === id ? (
                   <>
                     <Button>수정</Button>
-                    <Button type="danger">삭제</Button>
+                    <Button
+                      type="danger"
+                      loading={removePostLoading}
+                      onClick={onRemovePost}
+                    >
+                      삭제
+                    </Button>
                   </>
                 ) : (
                   <Button>신고</Button>
@@ -143,8 +150,8 @@ const PostCard = ({ post }) => {
             renderItem={(item) => (
               <li>
                 <Comment
-                  author={item.User.nickname}
-                  avatar={<Avatar>item.User.nickname</Avatar>}
+                  author={item.writer.nickname}
+                  avatar={<Avatar>item.writer.nickname</Avatar>}
                   content={item.content}
                 />
               </li>

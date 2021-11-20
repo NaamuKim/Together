@@ -30,7 +30,9 @@ const InputStyle = styled(Input)`
 
 const Signup = () => {
   const dispatch = useDispatch();
-  const { signUpDone, signUpError, me } = useSelector((state) => state.user);
+  const { signUpLoading, signUpDone, signUpError, me } = useSelector(
+    (state) => state.user
+  );
   useEffect(() => {
     if (me && me.id) {
       Router.replace("/");
@@ -128,14 +130,14 @@ const Signup = () => {
         </div>
         <div>
           <Checkbox name="user-term" checked={term} onChange={onChangeTerm}>
-            이용약관 확인 후 동의합니다.
+            together 시스템 사용 정책에 동의합니다.
           </Checkbox>
           {termError && (
             <ErrorMessage>약관 동의는 필수사항입니다.</ErrorMessage>
           )}
         </div>
         <SubmitWrapper>
-          <Button type="primary" htmlType="submit">
+          <Button type="primary" htmlType="submit" loading={signUpLoading}>
             가입하기
           </Button>
         </SubmitWrapper>

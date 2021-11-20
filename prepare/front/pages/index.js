@@ -10,6 +10,7 @@ import wrapper from "../store/configureStore";
 import { END } from "redux-saga";
 import axios from "axios";
 import cookie from "react-cookies";
+import cokie from "cookie";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -51,7 +52,7 @@ const Home = () => {
         <title>Together</title>
       </Head>
       <AppLayout>
-        <PostForm />
+        {me && <PostForm />}
         {mainPosts.map((post) => (
           <PostCard key={post.id} post={post} />
         ))}
@@ -62,19 +63,15 @@ const Home = () => {
 
 export const getServerSideProps = wrapper.getServerSideProps(
   async (context) => {
-    // const cookies = context.req ? context.req.headers.cookie : "";
-    // axios.defaults.headers.Cookie = "";
-    // console.log(cookies);
-    // if (context.req && cookies) {
-    //   if (cookies["accessToken"]) {
-    //     axios.defaults.headers.common["x-access-token"] =
-    //       cookies["accessToken"];
-    //     context.store.dispatch({
-    //       type: LOAD_MY_INFO_REQUEST,
-    //       data: cookies["accessToken"],
-    //     });
-    //   }
-    // }
+    const parsedCookie = context.req
+      ? cokie.parse(context.req.headers.cookie || "")
+      : "";
+
+    context.store.dispatch({
+      type: LOAD_MY_INFO_REQUEST,
+      data: parsedCookie["accessToken"],
+    });
+
     context.store.dispatch({
       type: LOAD_POSTS_REQUEST,
     });
