@@ -51,7 +51,7 @@ exports.createPost = asyncHandler( async(req, res) => {
   else { body.id = next.id+1 };
   await db.Post.create(body);
 
-  res.json({ success: true, status: 201, message:`Number ${body.id} Article Posted`});
+  res.json({ success: true, status: 201, message:`Number ${body.id} Article Posted`, data: body});
 })
 
 exports.getPosts = asyncHandler( async(req, res) => {
