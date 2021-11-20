@@ -2,14 +2,22 @@ import React, { useCallback } from "react";
 import { Avatar, Button, Card } from "antd";
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
-import { logoutRequestAction } from "../reducers/user";
+import {
+  LOAD_MY_INFO_REQUEST,
+  LOG_OUT_REQUEST,
+  logoutRequestAction,
+} from "../reducers/user";
+import cookie from "react-cookies";
 
 const UserProfile = () => {
   const dispatch = useDispatch();
   const { me, logOutLoading } = useSelector((state) => state.user);
 
   const onLogOut = useCallback(() => {
-    dispatch(logoutRequestAction());
+    dispatch({
+      type: LOG_OUT_REQUEST,
+      data: cookie.load("refreshToken"),
+    });
   }, []);
 
   return (

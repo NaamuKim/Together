@@ -17,10 +17,14 @@ import {
   LOAD_POSTS_SUCCESS,
   LOAD_POSTS_FAILURE,
   ADD_POST_TO_ME,
+  REMOVE_POST_REQUEST,
+  REMOVE_POST_SUCCESS,
+  REMOVE_POST_OF_ME,
+  REMOVE_POST_FAILURE,
 } from "../reducers/post";
 
 function likePostAPI(data) {
-  return axios.patch(`/post/${data}/like`);
+  return axios.patch(`/api/like/${data}`);
 }
 
 function* likePost(action) {
@@ -40,7 +44,7 @@ function* likePost(action) {
 }
 
 function unlikePostAPI(data) {
-  return axios.delete(`/post/${data}/like`);
+  return axios.delete(`/api/unlike/${data}`);
 }
 
 function* unlikePost(action) {
@@ -69,13 +73,34 @@ function* addPost(action) {
     const result = yield call(addPostAPI, action.data);
     yield put({
       type: ADD_POST_SUCCESS,
-      data: result.data,
+      data: result.data.data,
     });
-    yield put({ type: ADD_POST_TO_ME, data: result.data.id });
+    yield put({ type: ADD_POST_TO_ME, data: result.data.data.id });
   } catch (err) {
     console.error(err);
     yield put({
       type: ADD_POST_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
+function removePostAPI(data) {
+  return axios.delete(`/api/delete/${data}`);
+}
+
+function* removePost(action) {
+  try {
+    const result = yield call(removePostAPI, action.data);
+    yield put({
+      type: REMOVE_POST_SUCCESS,
+      data: result.data.data,
+    });
+    yield put({ type: REMOVE_POST_OF_ME, data: result.data.data.id });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: REMOVE_POST_FAILURE,
       error: err.response.data,
     });
   }
@@ -102,7 +127,7 @@ function* uploadImages(action) {
 }
 
 function loadPostsAPI(lastId) {
-  return axios.get(`/api/nexts/${lastId || 0}`);
+  return axios.get(`/api/nexts/${lastId || "first"}`);
 }
 
 function* loadPosts(action) {
@@ -123,6 +148,10 @@ function* loadPosts(action) {
 
 function* watchAddPost() {
   yield takeLatest(ADD_POST_REQUEST, addPost);
+}
+
+function* watchRemovePost() {
+  yield takeLatest(REMOVE_POST_REQUEST, removePost);
 }
 
 function* watchUploadImages() {

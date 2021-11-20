@@ -9,6 +9,7 @@ import { LOAD_MY_INFO_REQUEST } from "../reducers/user";
 import wrapper from "../store/configureStore";
 import { END } from "redux-saga";
 import axios from "axios";
+import cookie from "react-cookies";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -16,13 +17,13 @@ const Home = () => {
   const { mainPosts, hasMorePosts, loadPostsLoading } = useSelector(
     (state) => state.post
   );
-  // useEffect(() => {
-  //   if (!localStorage.getItem("accessToken")) {
-  //     dispatch({
-  //       type: LOG_OUT_REQUEST,
-  //     });
-  //   }
-  // });
+  useEffect(() => {
+    dispatch({
+      type: LOAD_MY_INFO_REQUEST,
+      data: cookie.load("accessToken"),
+    });
+  }, []);
+
   useEffect(() => {
     function onScroll() {
       if (

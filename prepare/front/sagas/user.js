@@ -135,7 +135,7 @@ function* changeNickname(action) {
 function loadMyInfoAPI(data) {
   return axios.get("/auth/me", {
     headers: {
-      Authorization: data,
+      "x-access-token": data,
     },
   });
 }
@@ -145,8 +145,10 @@ function* loadMyInfo(action) {
     const result = yield call(loadMyInfoAPI, action.data);
     yield put({
       type: LOAD_MY_INFO_SUCCESS,
-      data: result.data,
+      data: result.data.data.me,
     });
+    axios.defaults.headers.common["x-access-token"] =
+      result.data.data.accessToken;
   } catch (err) {
     console.error(err);
     yield put({
@@ -210,12 +212,16 @@ function* logIn(action) {
 }
 
 function logOutAPI(data) {
-  return axios.get("/auth/logout", data);
+  return axios.get("/auth/logout", {
+    headers: {
+      "x-refresh-token": data,
+    },
+  });
 }
 
 function* logOut(action) {
   try {
-    yield call(logOutAPI);
+    yield call(logOutAPI, action.data);
     yield put({
       type: LOG_OUT_SUCCESS,
     });

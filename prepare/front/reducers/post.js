@@ -80,7 +80,7 @@ const postReducer = (state = initialState, action) => {
       case LIKE_POST_SUCCESS:
         {
           const post = draft.mainPosts.find((v) => v.id === action.data.PostId);
-          post.Likers.push({ id: action.data.UserId });
+          post.likers.push({ id: action.data.data.id });
           draft.likePostLoading = false;
           draft.likePostDone = true;
         }
@@ -104,6 +104,7 @@ const postReducer = (state = initialState, action) => {
         draft.addPostLoading = false;
         draft.addPostError = action.error;
         break;
+
       case UPLOAD_IMAGES_REQUEST:
         draft.uploadImagesLoading = true;
         draft.uploadImagesDone = false;

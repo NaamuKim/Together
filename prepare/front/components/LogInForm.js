@@ -39,7 +39,7 @@ const Label = styled.label`
 `;
 
 const Button = styled.button`
-  background: linear-gradient(to left, rgb(255, 77, 46), rgb(255, 155, 47));
+  background: #017374;
   width: 100%;
   height: 35px;
   border: 0;
