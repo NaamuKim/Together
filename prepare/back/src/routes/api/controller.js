@@ -61,7 +61,7 @@ exports.getPosts = asyncHandler( async(req, res) => {
   const skip = (page - 1) * limit;
 
   const total = await db.Post.countDocuments();
-  const documents = await db.Post.find({}).skip(skip).limit(_limit);
+  const documents = await db.Post.find({}).sort({createdAt:-1}).skip(skip).limit(_limit);
 
   res.json({ total, page: _page, limit: _limit, data: documents });
 });
@@ -73,7 +73,7 @@ exports.getNexts = asyncHandler(async(req, res)=> {
   const _limit = +(limit || 10);
   const skip = (page - 1) * limit;
   const idConfirm = await db.Post.find({"id":id});
-  const documents = await db.Post.find({"id":{$gt:id}}).skip(skip).limit(_limit);
+  const documents = await db.Post.find({"lt":{$gt:id}}).sort({createdAt:-1}).skip(skip).limit(_limit);
   if (idConfirm.length == 0)
     throw createError(403, `${id} Post Not Found`);
   if (documents.length == 0)
@@ -85,7 +85,7 @@ exports.getMyPosts = asyncHandler( async(req, res) =>{
   const { user } = req;
   const userId = await User.findById(user._id).select(-'hashedPassword');
 
-  const documents = await db.Post.find({"writer.id": user._id});
+  const documents = await db.Post.find({"writer.id": user._id}).sort({createdAt:-1});
 
   res.json({ success: true, status: 200, message:`User ${userId.id}'s documents`, data: documents})
 });
@@ -135,7 +135,7 @@ exports.addLikes = asyncHandler(async(req, res) =>{
   await postData.updateOne({$push:{likedUsers: user._id}});
   await userInfo.updateOne({$push:{likedPosts: id}});
 
-  res.json({status: 200, success: true, message:`User ${userInfo.nickname} Liked Post ${id}`})
+  res.json({status: 200, success: true, message:`User ${userInfo.nickname} Liked Post ${id}`, data:{postId:id, userId:userInfo._id}})
 
 })
 
@@ -149,6 +149,5 @@ exports.removeLikes = asyncHandler(async(req, res)=> {
   await postData.updateOne({$pull:{likedUsers: user._id}});
   await userInfo.updateOne({$pull:{likedPosts: id}});
 
-  res.json({status: 200, success: true, message:`User ${user.nickname} Unliked Post ${id}`})
-
+  res.json({status: 200, success: true, message:`User ${user.nickname} Unliked Post ${id}`, data:{postId:id, userId:userInfo._id}})
 })

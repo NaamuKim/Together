@@ -13,7 +13,7 @@ exports.login = asyncHandler(async (req, res) => {
   const followers = exUser.followers;
   const followings = exUser.followings;
   const likedPosts = exUser.likedPosts;
-  const posts = await Post.find({"writer.id": id});
+  const posts = await Post.find({"writer.id": id}).sort({createdAt:-1});
   if (!exUser) throw createError(404, 'User Not Found');
   if (exUser.withdrawn) throw createError(403, 'Forbidden');
   if (!exUser.authenticate(password)) throw createError(400, 'Invalid Password');
@@ -38,7 +38,7 @@ exports.logout = asyncHandler(async (req, res) => {
 exports.getMe = asyncHandler(async (req, res) => {
   const { user } = req;
   const data = await User.findById(user._id);
-  const posts = await Post.find({writer:user._id})
+  const posts = await Post.find({"writer.id":user._id}).sort({createdAt:-1})
   res.json({ success: true, status: 200, message: `User ${data.nickname}'s Info`, data:{
       me:{nickname:data.nickname, id:data.id, email:data.email, followers: data.followers, followings: data.followings, likedPosts: data.likedPosts, posts: posts }} });
 });
