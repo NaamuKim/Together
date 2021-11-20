@@ -68,16 +68,20 @@ exports.getPosts = asyncHandler( async(req, res) => {
 
 exports.getNexts = asyncHandler(async(req, res)=> {
   const {params:{id}, query:{limit, page}} = req
-  console.log(id)
+  let searchId = id
+  if(searchId == 'first'){
+    firstDoc = await db.Post.find().sort({createdAt:-1})
+    searchId = firstDoc[0].id
+  }
   const _page = +(page || 1);
   const _limit = +(limit || 10);
   const skip = (page - 1) * limit;
-  const idConfirm = await db.Post.find({"id":id});
-  const documents = await db.Post.find({"lt":{$gt:id}}).sort({createdAt:-1}).skip(skip).limit(_limit);
+  const idConfirm = await db.Post.find({"id":searchId});
+  const documents = await db.Post.find({"id":{$lte:searchId}}).sort({createdAt:-1}).skip(skip).limit(_limit);
   if (idConfirm.length == 0)
-    throw createError(403, `${id} Post Not Found`);
+    throw createError(403, `${searchId} Post Not Found`);
   if (documents.length == 0)
-    throw createError(403, `${id} Is The Last Post`);
+    throw createError(403, `${searchId} Is The Last Post`);
   res.json({page: _page, limit: _limit, data: documents, lastId: documents.slice(-1)[0].id});
 })
 
