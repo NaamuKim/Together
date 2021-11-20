@@ -14,6 +14,7 @@ const postModel = new Schema({
   },
   images:[],
   hashTags:[],
+  likedUsers:[],
 }, {timestamps: true});
 
 exports.Post = mongoose.model('post', postModel);

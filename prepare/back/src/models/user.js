@@ -20,6 +20,7 @@ const schema = new Schema({
   },
   followers: [ ],
   followings: [ ],
+  likedPosts: [ ],
 },{timestamps:true});
 
 schema.virtual('password')

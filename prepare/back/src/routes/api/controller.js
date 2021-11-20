@@ -133,6 +133,7 @@ exports.addLikes = asyncHandler(async(req, res) =>{
   const { params: { id }, user} = req
   const postData = await db.Post.findOne({id:id});
   const userInfo = await db.User.findById(user._id);
+  console.log(userInfo);
   if(postData.likedUsers.includes(user._id) && userInfo.likedPosts.includes(id))
   { throw createError(403, 'User Already Liked Post'); }
 
