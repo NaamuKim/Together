@@ -145,10 +145,17 @@ function* loadMyInfo(action) {
     const result = yield call(loadMyInfoAPI, action.data);
     yield put({
       type: LOAD_MY_INFO_SUCCESS,
-      data: result.data.data.me,
+      data: result.data.data,
     });
-    axios.defaults.headers.common["x-access-token"] =
-      result.data.data.accessToken;
+    const accessToken = result.data.data.accessToken;
+    const refreshToken = result.data.data.refreshToken;
+
+    cookie.save("accessToken", accessToken, {
+      path: "/",
+    });
+    cookie.save("refreshToken", refreshToken, {
+      path: "/",
+    });
   } catch (err) {
     console.error(err);
     yield put({
@@ -159,7 +166,7 @@ function* loadMyInfo(action) {
 }
 
 function loadUserAPI(data) {
-  return axios.get(`/api//users/${data}`);
+  return axios.get(`/api/users/${data}`);
 }
 
 function* loadUser(action) {
@@ -187,7 +194,7 @@ function* logIn(action) {
     const result = yield call(logInAPI, action.data);
     yield put({
       type: LOG_IN_SUCCESS,
-      data: result.data.data.me,
+      data: result.data.data,
     });
     console.log(result.data);
     axios.defaults.headers.common["x-access-token"] =

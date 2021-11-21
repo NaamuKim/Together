@@ -66,11 +66,14 @@ export const getServerSideProps = wrapper.getServerSideProps(
     const parsedCookie = context.req
       ? cokie.parse(context.req.headers.cookie || "")
       : "";
-
-    context.store.dispatch({
-      type: LOAD_MY_INFO_REQUEST,
-      data: parsedCookie["accessToken"],
-    });
+    if (context.req && parsedCookie) {
+      if (parsedCookie["accessToken"]) {
+        context.store.dispatch({
+          type: LOAD_MY_INFO_REQUEST,
+          data: parsedCookie["accessToken"],
+        });
+      }
+    }
 
     context.store.dispatch({
       type: LOAD_POSTS_REQUEST,
