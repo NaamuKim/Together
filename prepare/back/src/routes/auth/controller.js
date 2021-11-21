@@ -40,7 +40,8 @@ exports.getMe = asyncHandler(async (req, res) => {
   const data = await User.findById(user._id);
   const posts = await Post.find({"writer.id":user._id}).sort({createdAt:-1})
   res.json({ success: true, status: 200, message: `User ${data.nickname}'s Info`, data:{
-      me:{nickname:data.nickname, id:data.id, email:data.email, followers: data.followers, followings: data.followings, likedPosts: data.likedPosts, posts: posts }} });
+      me:{nickname:data.nickname, id:data.id, email:data.email, followers: data.followers, followings: data.followings,
+        likedPosts: data.likedPosts, posts: posts, accessToken: req.get("x-access-token")}} });
 });
 
 exports.updateNickname = asyncHandler( async (req, res) =>{
