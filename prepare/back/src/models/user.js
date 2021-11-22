@@ -18,8 +18,18 @@ const schema = new Schema({
     enum: ['Admin', 'User'],
     default: 'User'
   },
-  followers: [ ],
-  followings: [ ],
+  followers: [{
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    index: true,
+    default: null,
+  }],
+  followings: [{
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    index: true,
+    default: null,
+  }],
   likedPosts: [ ],
 },{timestamps:true});
 

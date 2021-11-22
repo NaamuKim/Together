@@ -7,7 +7,9 @@ const { list } = require("pm2");
 exports.login = asyncHandler(async (req, res) => {
   const { body: { email, password }, user } = req;
 
-  const exUser = await User.findOne({ email:email});
+  const exUser = await User.findOne({ email:email})
+    .populate({ path: 'followers', select: 'nickname' })
+    .populate({ path: 'followings', select: 'nickname'});
   const nickname = exUser.nickname;
   const id = exUser._id
   const followers = exUser.followers;
@@ -37,7 +39,7 @@ exports.logout = asyncHandler(async (req, res) => {
 
 exports.getMe = asyncHandler(async (req, res) => {
   const { user } = req;
-  const data = await User.findById(user._id);
+  const data = await User.findById(user._id).populate({ path: 'followers', select: 'nickname' }).populate({path: 'followings', select: 'nickname'});
   const posts = await Post.find({"writer.id":user._id}).sort({createdAt:-1})
   res.json({ success: true, status: 200, message: `User ${data.nickname}'s Info`, data:{
       me:{nickname:data.nickname, id:data.id, email:data.email, followers: data.followers, followings: data.followings,
