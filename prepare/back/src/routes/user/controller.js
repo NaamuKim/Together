@@ -46,14 +46,16 @@ exports.followers = asyncHandler(async (req, res)=>{
 });
 
 exports.getfollowers = asyncHandler( async(req, res)=> {
-  const { user } = req
+  const { user, query:{limit} } = req
+  const limitNum = +(limit||10);
   const userInfo = await User.findById(user._id).select('-hashedPassword');
-  res.json({success:true, status: 200, message:`User Followers`, followers:userInfo.followers});
+  res.json({success:true, status: 200, message:`User Followers`, followers:userInfo.followers.slice(0,limitNum)});
 });
 
 exports.getfollowings = asyncHandler( async(req, res)=> {
-  const { user } = req
+  const { user, query:{limit} } = req
+  const limitNum = +(limit||10);
   const userInfo = await User.findById(user._id).select('-hashedPassword');
-  res.json({success:true, status: 200, message:`User Followings`, followers:userInfo.followings});
+  res.json({success:true, status: 200, message:`User Followings`, followers:userInfo.followings.slice(0,limitNum)});
 });
 
