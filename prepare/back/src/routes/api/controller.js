@@ -11,7 +11,9 @@ exports.findUsers = asyncHandler(async (req, res) => {
   const skip = (page - 1) * limit;
 
   const total = await User.countDocuments({ role: 'User' });
-  const documents = await User.find({}).skip(skip).limit(_limit);
+  const documents = await User.find({})
+    .populate({path: 'likedUsers', select: 'nickname'})
+    .skip(skip).limit(_limit);
 
   res.json({ total, page: _page, limit: _limit, data: documents })
 });
@@ -61,7 +63,9 @@ exports.getPosts = asyncHandler( async(req, res) => {
   const skip = (page - 1) * limit;
 
   const total = await db.Post.countDocuments();
-  const documents = await db.Post.find({}).sort({createdAt:-1}).skip(skip).limit(_limit);
+  const documents = await db.Post.find({})
+    .populate({path: 'likedUsers', select: 'nickname'})
+    .sort({createdAt:-1}).skip(skip).limit(_limit);
 
   res.json({ total, page: _page, limit: _limit, data: documents });
 });
@@ -77,7 +81,9 @@ exports.getNexts = asyncHandler(async(req, res)=> {
   const _limit = +(limit || 10);
   const skip = (page - 1) * limit;
   const idConfirm = await db.Post.find({"id":searchId});
-  const documents = await db.Post.find({"id":{$lte:searchId}}).sort({createdAt:-1}).skip(skip).limit(_limit);
+  const documents = await db.Post.find({"id":{$lte:searchId}})
+    .populate({path: 'likedUsers', select: 'nickname'})
+    .sort({createdAt:-1}).skip(skip).limit(_limit);
   if (idConfirm.length == 0)
     throw createError(403, `${searchId} Post Not Found`);
   if (documents.length == 0)
@@ -89,14 +95,16 @@ exports.getMyPosts = asyncHandler( async(req, res) =>{
   const { user } = req;
   const userId = await User.findById(user._id).select(-'hashedPassword');
 
-  const documents = await db.Post.find({"writer.id": user._id}).sort({createdAt:-1});
+  const documents = await db.Post.find({"writer.id": user._id})
+    .populate({path: 'likedUsers', select: 'nickname'})
+    .sort({createdAt:-1});
 
   res.json({ success: true, status: 200, message:`User ${userId.id}'s documents`, data: documents})
 });
 
 exports.getPost = asyncHandler(async(req, res)=>{
   const { params: {id} } = req;
-  const document = await db.Post.findOne({id:id})
+  const document = await db.Post.findOne({id:id}).populate({path: 'likedUsers', select: 'nickname'})
 
   res.json({ document });
 });
