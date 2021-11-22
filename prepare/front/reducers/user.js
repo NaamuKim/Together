@@ -98,8 +98,6 @@ const reducer = (state = initialState, action) =>
       case LOAD_MY_INFO_SUCCESS:
         draft.loadMyInfoLoading = false;
         draft.me = action.data.me;
-        draft.accessToken = action.data.accessToken;
-        draft.refreshToken = action.data.refreshToken;
         draft.loadMyInfoDone = true;
         break;
       case LOAD_MY_INFO_FAILURE:
@@ -129,7 +127,7 @@ const reducer = (state = initialState, action) =>
         draft.removeFollowerLoading = false;
         draft.removeFollowerDone = true;
         draft.me.followers = draft.me.followers.filter(
-          (v) => v.id !== action.data.UserId
+          (v) => v.id !== action.data.id
         );
         break;
       case REMOVE_FOLLOWER_FAILURE:

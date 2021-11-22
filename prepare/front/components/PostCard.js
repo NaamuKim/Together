@@ -70,7 +70,7 @@ const PostCard = ({ post }) => {
     });
   }, [id]);
 
-  const liked = post.likedUsers.find((v) => v === id);
+  const liked = post.likedUsers.find((v) => v.id === id);
   return (
     <StyledDiv>
       <Card
@@ -171,7 +171,7 @@ PostCard.propTypes = {
     createdAt: PropTypes.string,
     comments: PropTypes.arrayOf(PropTypes.object),
     images: PropTypes.arrayOf(PropTypes.string),
-    likers: PropTypes.arrayOf(PropTypes.object),
+    likedUsers: PropTypes.arrayOf(PropTypes.object),
   }).isRequired,
 };
 

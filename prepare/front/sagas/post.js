@@ -32,7 +32,7 @@ function* likePost(action) {
     const result = yield call(likePostAPI, action.data);
     yield put({
       type: LIKE_POST_SUCCESS,
-      data: result.data,
+      data: result.data.data,
     });
   } catch (err) {
     console.error(err);
@@ -44,7 +44,7 @@ function* likePost(action) {
 }
 
 function unlikePostAPI(data) {
-  return axios.delete(`/api/unlike/${data}`);
+  return axios.patch(`/api/unlike/${data}`);
 }
 
 function* unlikePost(action) {
@@ -52,7 +52,7 @@ function* unlikePost(action) {
     const result = yield call(unlikePostAPI, action.data);
     yield put({
       type: UNLIKE_POST_SUCCESS,
-      data: result.data,
+      data: result.data.data,
     });
   } catch (err) {
     console.error(err);

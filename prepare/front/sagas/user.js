@@ -33,12 +33,13 @@ import {
 } from "../reducers/user";
 
 function followAPI(data) {
-  return axios.patch(`/user/${data}/follow`);
+  return axios.patch(`/user/followings/${data}?option=follow`);
 }
 
 function* follow(action) {
   try {
     const result = yield call(followAPI, action.data);
+    console.log(result.data);
     yield put({
       type: FOLLOW_SUCCESS,
       data: result.data,
@@ -148,14 +149,14 @@ function* loadMyInfo(action) {
       data: result.data.data,
     });
     const accessToken = result.data.data.accessToken;
-    const refreshToken = result.data.data.refreshToken;
+    // const refreshToken = result.data.data.refreshToken;
 
     cookie.save("accessToken", accessToken, {
       path: "/",
     });
-    cookie.save("refreshToken", refreshToken, {
-      path: "/",
-    });
+    // cookie.save("refreshToken", refreshToken, {
+    //   path: "/",
+    // });
   } catch (err) {
     console.error(err);
     yield put({
@@ -232,6 +233,8 @@ function* logOut(action) {
     yield put({
       type: LOG_OUT_SUCCESS,
     });
+    cookie.remove("accessToken");
+    cookie.remove("refreshToken");
   } catch (err) {
     console.error(err);
     yield put({

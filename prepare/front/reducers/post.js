@@ -79,8 +79,11 @@ const postReducer = (state = initialState, action) => {
         break;
       case LIKE_POST_SUCCESS:
         {
-          const post = draft.mainPosts.find((v) => v.id === action.data.PostId);
-          post.likers.push({ id: action.data.data.id });
+          console.log(action.data);
+          const post = draft.mainPosts.find(
+            (v) => v.id === +action.data.postId
+          );
+          post.likedUsers.push({ id: action.data.userId });
           draft.likePostLoading = false;
           draft.likePostDone = true;
         }
@@ -88,6 +91,28 @@ const postReducer = (state = initialState, action) => {
       case LIKE_POST_FAILURE:
         draft.likePostLoading = false;
         draft.likePostError = action.error;
+        break;
+      case UNLIKE_POST_REQUEST:
+        draft.unlikePostLoading = true;
+        draft.unlikePostDone = false;
+        draft.unlikePostError = null;
+        break;
+      case UNLIKE_POST_SUCCESS:
+        {
+          console.log(action.data);
+          const post = draft.mainPosts.find(
+            (v) => v.id === +action.data.postId
+          );
+          post.likedUsers = post.likedUsers.filter(
+            (v) => v.id !== action.data.userId
+          );
+          draft.unlikePostLoading = false;
+          draft.unlikePostDone = true;
+        }
+        break;
+      case UNLIKE_POST_FAILURE:
+        draft.unlikePostLoading = false;
+        draft.unlikePostError = action.error;
         break;
       case ADD_POST_REQUEST:
         draft.addPostLoading = true;
@@ -104,7 +129,6 @@ const postReducer = (state = initialState, action) => {
         draft.addPostLoading = false;
         draft.addPostError = action.error;
         break;
-
       case UPLOAD_IMAGES_REQUEST:
         draft.uploadImagesLoading = true;
         draft.uploadImagesDone = false;

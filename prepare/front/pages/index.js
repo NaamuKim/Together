@@ -18,12 +18,12 @@ const Home = () => {
   const { mainPosts, hasMorePosts, loadPostsLoading } = useSelector(
     (state) => state.post
   );
-  useEffect(() => {
-    dispatch({
-      type: LOAD_MY_INFO_REQUEST,
-      data: cookie.load("accessToken"),
-    });
-  }, []);
+  // useEffect(() => {
+  //   dispatch({
+  //     type: LOAD_MY_INFO_REQUEST,
+  //     data: cookie.load("accessToken"),
+  //   });
+  // }, []);
 
   useEffect(() => {
     function onScroll() {
