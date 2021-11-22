@@ -109,11 +109,6 @@ const Header = () => {
           </Link>
         </Item>
         <Item>
-          <Link href="/">
-            <MenuContent>커뮤니티</MenuContent>
-          </Link>
-        </Item>
-        <Item>
           <Link href="/signup">
             <MenuContent>회원가입</MenuContent>
           </Link>

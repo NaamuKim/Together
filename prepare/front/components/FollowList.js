@@ -15,7 +15,7 @@ const LoadMore = styled.div`
   margin: 10px 0; ;
 `;
 
-const FollowList = ({ header, data, onCLickMore, loading }) => {
+const FollowList = ({ header, data, onClickMore, loading }) => {
   const dispatch = useDispatch();
   const onClick = (id) => () => {
     if (header === "팔로잉") {
@@ -36,7 +36,9 @@ const FollowList = ({ header, data, onCLickMore, loading }) => {
       header={<div>{header}</div>}
       loadmore={
         <LoadMore>
-          <Button>더 보기</Button>
+          <Button onClick={onClickMore} loading={loading}>
+            더 보기
+          </Button>
         </LoadMore>
       }
       bordered

@@ -70,7 +70,7 @@ const PostCard = ({ post }) => {
     });
   }, [id]);
 
-  const liked = post.likedUsers.find((v) => v.id === id);
+  const liked = post.likedUsers.find((v) => v._id === id);
   return (
     <StyledDiv>
       <Card

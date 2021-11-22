@@ -9,8 +9,8 @@ const FollowButton = ({ post }) => {
   const { me, followLoading, unfollowLoading } = useSelector(
     (state) => state.user
   );
-  const isFollowing = me?.followings.find((v) => v.id === post.writer.id);
-  const onCLickButton = useCallback(() => {
+  const isFollowing = me?.followings.find((v) => v._id === post.writer.id);
+  const onClickButton = useCallback(() => {
     if (isFollowing) {
       dispatch({
         type: UNFOLLOW_REQUEST,
@@ -24,7 +24,7 @@ const FollowButton = ({ post }) => {
     return null;
   }
   return (
-    <Button loading={followLoading || unfollowLoading} onClick={onCLickButton}>
+    <Button loading={followLoading || unfollowLoading} onClick={onClickButton}>
       {isFollowing ? "언팔로우" : "팔로우"}
     </Button>
   );

@@ -9,8 +9,7 @@ import { LOAD_MY_INFO_REQUEST } from "../reducers/user";
 import wrapper from "../store/configureStore";
 import { END } from "redux-saga";
 import axios from "axios";
-import cookie from "react-cookies";
-import cokie from "cookie";
+import cookie from "cookie";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -64,7 +63,7 @@ const Home = () => {
 export const getServerSideProps = wrapper.getServerSideProps(
   async (context) => {
     const parsedCookie = context.req
-      ? cokie.parse(context.req.headers.cookie || "")
+      ? cookie.parse(context.req.headers.cookie || "")
       : "";
     if (context.req && parsedCookie) {
       if (parsedCookie["accessToken"]) {

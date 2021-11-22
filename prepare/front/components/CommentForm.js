@@ -8,7 +8,7 @@ const CommentForm = ({ post }) => {
   const [commentText, onChangeCommentText, setCommentText] = useInput("");
 
   const onSubmitComment = useCallback(() => {
-    console.log(commentText);
+    console.log(post.id, commentText);
   }, [commentText]);
 
   return (

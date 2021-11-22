@@ -11,25 +11,33 @@ import FollowList from "../components/FollowList";
 import { LOAD_MY_INFO_REQUEST } from "../reducers/user";
 import wrapper from "../store/configureStore";
 import { backUrl } from "../config/config";
+import cookie from "cookie";
 
-const fetcher = (url) =>
-  axios.get(url, { withCredentials: true }).then((result) => result.data);
+const followersFetcher = (url) =>
+  axios
+    .get(url, { withCredentials: true })
+    .then((result) => result.data.followers);
+
+const followingsFetcher = (url) =>
+  axios
+    .get(url, { withCredentials: true })
+    .then((result) => result.data.followings);
 
 const Profile = () => {
   const { me } = useSelector((state) => state.user);
   const [followersLimit, setFollowersLimit] = useState(3);
   const [followingsLimit, setFollowingsLimit] = useState(3);
-
   const { data: followersData, error: followerError } = useSWR(
     `${backUrl}/user/followers?limit=${followersLimit}`,
-    fetcher
+    followersFetcher
   );
 
   const { data: followingsData, error: followingError } = useSWR(
     `${backUrl}/user/followings?limit=${followingsLimit}`,
-    fetcher
+    followingsFetcher
   );
 
+  console.log(followersData, followingsData);
   useEffect(() => {
     if (!(me && me.id)) {
       Router.push("/");
@@ -77,20 +85,22 @@ const Profile = () => {
   );
 };
 
-// export const getServerSideProps = wrapper.getServerSideProps(
-//   async (context) => {
-//     const cookie = context.req ? context.req.headers.cookie : "";
-//     axios.defaults.headers.Cookie = "";
-//     console.log(cookie);
-//     if (context.req && cookie) {
-//       axios.defaults.headers.Cookie = cookie;
-//     }
-//     context.store.dispatch({
-//       type: LOAD_MY_INFO_REQUEST,
-//     });
-//     context.store.dispatch(END);
-//     await context.store.sagaTask.toPromise();
-//   }
-// );
+export const getServerSideProps = wrapper.getServerSideProps(
+  async (context) => {
+    const parsedCookie = context.req
+      ? cookie.parse(context.req.headers.cookie || "")
+      : "";
+    if (context.req && parsedCookie) {
+      if (parsedCookie["accessToken"]) {
+        context.store.dispatch({
+          type: LOAD_MY_INFO_REQUEST,
+          data: parsedCookie["accessToken"],
+        });
+      }
+    }
+    context.store.dispatch(END);
+    await context.store.sagaTask.toPromise();
+  }
+);
 
 export default Profile;
