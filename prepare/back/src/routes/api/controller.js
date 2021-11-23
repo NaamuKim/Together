@@ -133,7 +133,7 @@ exports.deletePost = asyncHandler( async(req, res) => {
   const document = await db.Post.findOne({id:id})
   if(document.writer.id == userId._id || user.role == 'Admin') {
     await document.delete();
-    res.json({ success: true, status: 200, message:`${id} Post Deleted`})
+    res.json({ success: true, status: 200, message:`${id} Post Deleted` ,data:{postId: id}})
   } else {
     throw createError(403);
   }
