@@ -73,7 +73,7 @@ exports.addComments = asyncHandler(async(req, res)=> {
   body.contentId = id
   const documents = await Comment.create(body)
   await post.updateOne({$push:{comments:documents._id}})
-  res.json({success:true, status: 200, message: "Comment Added"})
+  res.json({success:true, status: 200, message: "Comment Added", data:{postId:id}})
 })
 
 exports.removeComments = asyncHandler(async(req,res) => {
@@ -85,7 +85,7 @@ exports.removeComments = asyncHandler(async(req,res) => {
   if( document.writer == user._id || user.role == "admin") {
     await document.delete()
     await post.updateOne({$pull:{Comments:id}})
-    res.json({success: true, status: 200, message: "Comment Deleted"})
+    res.json({success: true, status: 200, message: "Comment Deleted", data:{postId: document.contentId}})
   } else {
     throw createError(400, "Unable To Handle The Request")
   }
