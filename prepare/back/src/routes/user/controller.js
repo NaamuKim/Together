@@ -1,6 +1,6 @@
 const asyncHandler = require('express-async-handler');
 const createError = require('http-errors');
-const { User, Post } = require('../../models');
+const { User, Post, Comment } = require('../../models');
 const { signAccessToken, signRefreshToken, verifyRefreshToken } = require('../../utils/jwt');
 
 //팔로워 관련 컨트롤러
@@ -62,4 +62,32 @@ exports.getfollowings = asyncHandler( async(req, res)=> {
     .select('-hashedPassword');
   res.json({success:true, status: 200, message:`User Followings`, followings:userInfo.followings.slice(0,limitNum)});
 });
+
+
+//댓글관련
+exports.addComments = asyncHandler(async(req, res)=> {
+  const { params:{ id }, body, user } = req
+  const post = await Post.findOne({id:id});
+  if(!post) throw createError(400, "Post Not Found")
+  body.writer = user._id
+  body.contentId = id
+  const documents = await Comment.create(body)
+  await post.updateOne({$push:{comments:documents._id}})
+  res.json({success:true, status: 200, message: "Comment Added", data:{postId:id, comment:body.comment}});
+})
+
+exports.removeComments = asyncHandler(async(req,res) => {
+  const { params:{id}, user} = req
+  const document = await Comment.findById(id);
+  if (!document) throw createError(400, "Comment Not Found")
+  const post = await Post.findOne({id:document.contentId})
+  if (!post) throw createError(400, "Post Not Found")
+  if( document.writer == user._id || user.role == "Admin") {
+    await document.delete()
+    await post.updateOne({$pull:{Comments:id}})
+    res.json({success: true, status: 200, message: "Comment Deleted", data:{postId: document.contentId}})
+  } else {
+    throw createError(400, "Unable To Handle The Request")
+  }
+})
 

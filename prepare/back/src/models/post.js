@@ -14,6 +14,12 @@ const postModel = new Schema({
   },
   images:[],
   hashTags:[],
+  comments:[{
+    type: Schema.Types.ObjectId,
+    ref: 'Comment',
+    index: true,
+    default: null,
+  }],
   likedUsers:[{
       type: Schema.Types.ObjectId,
       ref: 'User',

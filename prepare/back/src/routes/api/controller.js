@@ -51,9 +51,9 @@ exports.createPost = asyncHandler( async(req, res) => {
 
   if(!next) { body.id = 0 }
   else { body.id = next.id+1 };
-  await db.Post.create(body);
+  const document = await db.Post.create(body);
 
-  res.json({ success: true, status: 201, message:`Number ${body.id} Article Posted`, data: body});
+  res.json({ success: true, status: 201, message:`Number ${body.id} Article Posted`, data: document});
 })
 
 exports.getPosts = asyncHandler( async(req, res) => {
@@ -65,6 +65,7 @@ exports.getPosts = asyncHandler( async(req, res) => {
   const total = await db.Post.countDocuments();
   const documents = await db.Post.find({})
     .populate({path: 'likedUsers', select: 'nickname'})
+    .populate({path: 'comments', populate: {path: 'writer', select: 'nickname'}, select:'comment'})
     .sort({createdAt:-1}).skip(skip).limit(_limit);
 
   res.json({ total, page: _page, limit: _limit, data: documents });
@@ -83,6 +84,7 @@ exports.getNexts = asyncHandler(async(req, res)=> {
   const idConfirm = await db.Post.find({"id":searchId});
   const documents = await db.Post.find({"id":{$lte:searchId}})
     .populate({path: 'likedUsers', select: 'nickname'})
+    .populate({path: 'comments', populate: {path: 'writer', select: 'nickname'}, select:'comment'})
     .sort({createdAt:-1}).skip(skip).limit(_limit);
   if (idConfirm.length == 0)
     throw createError(403, `${searchId} Post Not Found`);
@@ -97,6 +99,7 @@ exports.getMyPosts = asyncHandler( async(req, res) =>{
 
   const documents = await db.Post.find({"writer.id": user._id})
     .populate({path: 'likedUsers', select: 'nickname'})
+    .populate({path: 'comments', populate: {path: 'writer', select: 'nickname'}, select:'comment'})
     .sort({createdAt:-1});
 
   res.json({ success: true, status: 200, message:`User ${userId.id}'s documents`, data: documents})
@@ -104,8 +107,9 @@ exports.getMyPosts = asyncHandler( async(req, res) =>{
 
 exports.getPost = asyncHandler(async(req, res)=>{
   const { params: {id} } = req;
-  const document = await db.Post.findOne({id:id}).populate({path: 'likedUsers', select: 'nickname'})
-
+  const document = await db.Post.findOne({id:id})
+    .populate({path: 'likedUsers', select: 'nickname'})
+    .populate({path: 'comments', populate: {path: 'writer', select: 'nickname'}, select:'comment'})
   res.json({ document });
 });
 
@@ -115,7 +119,7 @@ exports.updatePost = asyncHandler( async(req, res) => {
   const userId = await User.findById(user._id).select('-hashedPassword');
 
   const document = await db.Post.findOne({id:id})
-  if(document.writer.id == userId._id || user.role == 'admin') {
+  if(document.writer.id == userId._id || user.role == 'Admin') {
     await document.updateOne({content:content, hashTags: hashTags});
     res.json({ success: true, status: 200, message:`${id} Post updated`})
   } else {
@@ -127,9 +131,9 @@ exports.deletePost = asyncHandler( async(req, res) => {
   const { params: { id }, user} = req;
   const userId = await User.findById(user._id).select('-hashedPassword');
   const document = await db.Post.findOne({id:id})
-  if(document.writer.id == userId._id || user.role == 'admin') {
+  if(document.writer.id == userId._id || user.role == 'Admin') {
     await document.delete();
-    res.json({ success: true, status: 200, message:`${id} Post Deleted`})
+    res.json({ success: true, status: 200, message:`${id} Post Deleted` ,data:{postId: id}})
   } else {
     throw createError(403);
   }
