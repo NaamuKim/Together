@@ -151,8 +151,8 @@ const PostCard = ({ post }) => {
               <li>
                 <Comment
                   author={item.writer.nickname}
-                  avatar={<Avatar>item.writer.nickname</Avatar>}
-                  content={item.content}
+                  avatar={<Avatar>{item.writer.nickname}</Avatar>}
+                  content={item.comment}
                 />
               </li>
             )}

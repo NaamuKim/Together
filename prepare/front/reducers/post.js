@@ -90,7 +90,7 @@ const postReducer = (state = initialState, action) => {
           const post = draft.mainPosts.find(
             (v) => v.id === +action.data.postId
           );
-          post.likedUsers.push({ id: action.data.userId });
+          post.likedUsers.push({ _id: action.data.userId });
           draft.likePostLoading = false;
           draft.likePostDone = true;
         }
@@ -110,7 +110,7 @@ const postReducer = (state = initialState, action) => {
             (v) => v.id === +action.data.postId
           );
           post.likedUsers = post.likedUsers.filter(
-            (v) => v.id !== action.data.userId
+            (v) => v._id !== action.data.userId
           );
           draft.unlikePostLoading = false;
           draft.unlikePostDone = true;
@@ -134,6 +134,37 @@ const postReducer = (state = initialState, action) => {
       case ADD_POST_FAILURE:
         draft.addPostLoading = false;
         draft.addPostError = action.error;
+        break;
+      case REMOVE_POST_REQUEST:
+        draft.removePostLoading = true;
+        draft.removePostDone = false;
+        draft.removePostError = null;
+        break;
+      case REMOVE_POST_SUCCESS:
+        draft.removePostLoading = false;
+        draft.removePostDone = true;
+        draft.mainPosts = draft.mainPosts.filter(
+          (v) => v.id !== +action.data.postId
+        );
+        break;
+      case REMOVE_POST_FAILURE:
+        draft.removePostLoading = false;
+        draft.removePostError = action.error;
+        break;
+      case ADD_COMMENT_REQUEST:
+        draft.addCommentLoading = true;
+        draft.addCommentDone = false;
+        draft.addCommentError = null;
+        break;
+      case ADD_COMMENT_SUCCESS:
+        const post = draft.mainPosts.find((v) => v.id === +action.data.postId);
+        post.comments.unshift(action.data.comment);
+        draft.addCommentLoading = false;
+        draft.addCommentDone = true;
+        break;
+      case ADD_COMMENT_FAILURE:
+        draft.addCommentLoading = false;
+        draft.addCommentError = action.error;
         break;
       case UPLOAD_IMAGES_REQUEST:
         draft.uploadImagesLoading = true;

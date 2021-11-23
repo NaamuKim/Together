@@ -35,7 +35,7 @@ const AppLayout = ({ children }) => {
         <Col xs={24} md={6}>
           <WriterDiv>
             <WriterInfo
-              href="https://lost731.github.io"
+              href="https://naamukim.github.io"
               target="_black"
               rel="noreferrer noopener"
             >

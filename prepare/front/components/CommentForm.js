@@ -23,9 +23,9 @@ const CommentForm = ({ post }) => {
     console.log(post.id, commentText);
     dispatch({
       type: ADD_COMMENT_REQUEST,
-      data: { content: commentText, postId: post.id, userId: id },
+      data: { comment: commentText, postId: post.id },
     });
-  }, [commentText, id]);
+  }, [commentText]);
 
   return (
     <Form onFinish={onSubmitComment}>

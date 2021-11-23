@@ -253,7 +253,9 @@ const reducer = (state = initialState, action) =>
         draft.me.posts.unshift({ id: action.data });
         break;
       case REMOVE_POST_OF_ME:
-        draft.me.post = draft.me.posts.filter((v) => v.id !== action.data);
+        draft.me.post = draft.me.posts.filter(
+          (v) => v.id !== +action.data.postId
+        );
         break;
       default:
         break;

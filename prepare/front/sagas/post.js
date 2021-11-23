@@ -27,7 +27,8 @@ import {
 } from "../reducers/post";
 
 function addCommentAPI(data) {
-  return axios.post("/api/posts", data);
+  console.log(data.comment, data.postId);
+  return axios.post(`/user/comments/${data.postId}`, { comment: data.comment });
 }
 
 function* addComment(action) {
@@ -38,7 +39,6 @@ function* addComment(action) {
       type: ADD_COMMENT_SUCCESS,
       data: result.data.data,
     });
-    yield put({ type: ADD_COMMENT_TO_ME, data: result.data.data.id });
   } catch (err) {
     console.error(err);
     yield put({
@@ -174,6 +174,9 @@ function* loadPosts(action) {
 function* watchAddPost() {
   yield takeLatest(ADD_POST_REQUEST, addPost);
 }
+function* watchAddComment() {
+  yield takeLatest(ADD_COMMENT_REQUEST, addComment);
+}
 
 function* watchRemovePost() {
   yield takeLatest(REMOVE_POST_REQUEST, removePost);
@@ -198,6 +201,7 @@ function* watchUnlikePost() {
 export default function* postSaga() {
   yield all([
     fork(watchAddPost),
+    fork(watchAddComment),
     fork(watchUploadImages),
     fork(watchLoadPosts),
     fork(watchLikePost),
