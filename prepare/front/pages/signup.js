@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import AppLayout from "../components/AppLayout";
 import { Button, Checkbox, Form, Input } from "antd";
 import styled from "@emotion/styled";
-import useInput from "../hooks/useinput";
+import useInput from "../hooks/useInput";
 import { useDispatch } from "react-redux";
 import { SIGN_UP_REQUEST } from "../reducers/user";
 

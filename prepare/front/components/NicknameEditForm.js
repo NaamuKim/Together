@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import styled from "@emotion/styled";
 import { Form, Input } from "antd";
-import useInput from "../hooks/useinput";
+import useInput from "../hooks/useInput";
 import { useDispatch } from "react-redux";
 import { CHANGE_NICKNAME_REQUEST } from "../reducers/user";
 
