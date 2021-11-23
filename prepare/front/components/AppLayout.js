@@ -6,7 +6,19 @@ import Header from "./Header";
 import LogInForm from "./LogInForm";
 import { useSelector } from "react-redux";
 import UserProfile from "./UserProfile";
+import styled from "@emotion/styled";
 
+const WriterInfo = styled.a`
+  padding-right: 20px;
+  padding-bottom: 10px;
+`;
+
+const WriterDiv = styled.div`
+  padding-top: 20px;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+`;
 const AppLayout = ({ children }) => {
   const { me } = useSelector((state) => state.user);
   return (
@@ -21,20 +33,22 @@ const AppLayout = ({ children }) => {
           {children}
         </Col>
         <Col xs={24} md={6}>
-          <a
-            href="https://lost731.github.io"
-            target="_black"
-            rel="noreferrer noopener"
-          >
-            made by KimNaMu
-          </a>
-          <a
-            href="https://github.com/CheezeLatte"
-            target="_black"
-            rel="noreferrer noopener"
-          >
-            made by CheeseLatte
-          </a>
+          <WriterDiv>
+            <WriterInfo
+              href="https://lost731.github.io"
+              target="_black"
+              rel="noreferrer noopener"
+            >
+              front-end: made by KimNaMu
+            </WriterInfo>
+            <WriterInfo
+              href="https://github.com/CheezeLatte"
+              target="_black"
+              rel="noreferrer noopener"
+            >
+              back-end: made by CheeseLatte
+            </WriterInfo>
+          </WriterDiv>
         </Col>
       </Row>
     </div>

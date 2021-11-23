@@ -11,6 +11,9 @@ export const initialState = {
   unlikePostLoading: false,
   unlikePostDone: false,
   unlikePOstError: null,
+  addCommentLoading: false,
+  addCommentDone: false,
+  addCommentError: null,
   loadPostsLoading: false,
   loadPostsDone: false,
   loadPostsError: null,
@@ -33,6 +36,10 @@ export const UNLIKE_POST_FAILURE = "UNLIKE_POST_FAILURE";
 export const ADD_POST_REQUEST = "ADD_POST_REQUEST";
 export const ADD_POST_SUCCESS = "ADD_POST_SUCCESS";
 export const ADD_POST_FAILURE = "ADD_POST_FAILURE";
+
+export const ADD_COMMENT_REQUEST = "ADD_COMMENT_REQUEST";
+export const ADD_COMMENT_SUCCESS = "ADD_COMMENT_SUCCESS";
+export const ADD_COMMENT_FAILURE = "ADD_COMMENT_FAILURE";
 
 export const UPLOAD_IMAGES_REQUEST = "UPLOAD_IMAGES_REQUEST";
 export const UPLOAD_IMAGES_SUCCESS = "UPLOAD_IMAGES_SUCCESS";
@@ -99,7 +106,6 @@ const postReducer = (state = initialState, action) => {
         break;
       case UNLIKE_POST_SUCCESS:
         {
-          console.log(action.data);
           const post = draft.mainPosts.find(
             (v) => v.id === +action.data.postId
           );

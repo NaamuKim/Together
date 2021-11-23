@@ -13,6 +13,9 @@ import {
   UPLOAD_IMAGES_REQUEST,
   UPLOAD_IMAGES_SUCCESS,
   UPLOAD_IMAGES_FAILURE,
+  ADD_COMMENT_REQUEST,
+  ADD_COMMENT_SUCCESS,
+  ADD_COMMENT_FAILURE,
   LOAD_POSTS_REQUEST,
   LOAD_POSTS_SUCCESS,
   LOAD_POSTS_FAILURE,
@@ -22,6 +25,28 @@ import {
   REMOVE_POST_OF_ME,
   REMOVE_POST_FAILURE,
 } from "../reducers/post";
+
+function addCommentAPI(data) {
+  return axios.post("/api/posts", data);
+}
+
+function* addComment(action) {
+  try {
+    console.log(action.data);
+    const result = yield call(addCommentAPI, action.data);
+    yield put({
+      type: ADD_COMMENT_SUCCESS,
+      data: result.data.data,
+    });
+    yield put({ type: ADD_COMMENT_TO_ME, data: result.data.data.id });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: ADD_POST_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
 
 function likePostAPI(data) {
   return axios.patch(`/api/like/${data}`);
@@ -177,5 +202,6 @@ export default function* postSaga() {
     fork(watchLoadPosts),
     fork(watchLikePost),
     fork(watchUnlikePost),
+    fork(watchRemovePost),
   ]);
 }

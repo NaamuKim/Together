@@ -57,7 +57,7 @@ const style = css`
     margin-right: 0 !important;
     margin-left: 0 !important;
   }
-  .ant-col:first-child {
+  .ant-col:first-of-type {
     padding-left: 0 !important;
   }
   .ant-col:last-child {
