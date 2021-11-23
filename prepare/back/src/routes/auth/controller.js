@@ -9,7 +9,9 @@ exports.login = asyncHandler(async (req, res) => {
 
   const exUser = await User.findOne({ email:email})
     .populate({ path: 'followers', select: 'nickname' })
-    .populate({ path: 'followings', select: 'nickname'});
+    .populate({ path: 'followings', select: 'nickname'})
+    .populate({path: 'comments', populate: {path: 'writer', select: 'nickname'}, select:'comment'})
+
   const nickname = exUser.nickname;
   const id = exUser._id
   const followers = exUser.followers;
@@ -39,7 +41,10 @@ exports.logout = asyncHandler(async (req, res) => {
 
 exports.getMe = asyncHandler(async (req, res) => {
   const { user } = req;
-  const data = await User.findById(user._id).populate({ path: 'followers', select: 'nickname' }).populate({path: 'followings', select: 'nickname'});
+  const data = await User.findById(user._id)
+    .populate({ path: 'followers', select: 'nickname' })
+    .populate({path: 'followings', select: 'nickname'})
+    .populate({path: 'comments', populate: {path: 'writer', select: 'nickname'}, select:'comment'});
   const posts = await Post.find({"writer.id":user._id}).sort({createdAt:-1})
   res.json({ success: true, status: 200, message: `User ${data.nickname}'s Info`, data:{
       me:{nickname:data.nickname, id:data.id, email:data.email, followers: data.followers, followings: data.followings,
