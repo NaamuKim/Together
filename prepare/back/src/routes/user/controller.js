@@ -73,14 +73,14 @@ exports.addComments = asyncHandler(async(req, res)=> {
   body.contentId = id
   const documents = await Comment.create(body)
   await post.updateOne({$push:{comments:documents._id}})
-  res.json({success:true, status: 200, message: "Comment Added", data:{postId:id}})
+  res.json({success:true, status: 200, message: "Comment Added", data:{postId:id, comment:body.comment}});
 })
 
 exports.removeComments = asyncHandler(async(req,res) => {
   const { params:{id}, user} = req
   const document = await Comment.findById(id);
-  const post = await Post.findOne({id:document.contentId})
   if (!document) throw createError(400, "Comment Not Found")
+  const post = await Post.findOne({id:document.contentId})
   if (!post) throw createError(400, "Post Not Found")
   if( document.writer == user._id || user.role == "Admin") {
     await document.delete()
