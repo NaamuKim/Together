@@ -82,7 +82,7 @@ exports.removeComments = asyncHandler(async(req,res) => {
   const post = await Post.findOne({id:document.contentId})
   if (!document) throw createError(400, "Comment Not Found")
   if (!post) throw createError(400, "Post Not Found")
-  if( document.writer == user._id || user.role == "admin") {
+  if( document.writer == user._id || user.role == "Admin") {
     await document.delete()
     await post.updateOne({$pull:{Comments:id}})
     res.json({success: true, status: 200, message: "Comment Deleted", data:{postId: document.contentId}})
