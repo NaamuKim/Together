@@ -88,3 +88,5 @@ config.js
 
 # DynamoDB Local files
 .dynamodb/
+
+together.pem

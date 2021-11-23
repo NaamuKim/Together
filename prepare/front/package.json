@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "next",
-    "build": "next build"
+    "dev": "cross-env ANALYZE=true NODE_ENV=production next build",
+    "build": "cross-env NODE_ENV=production next start -p 3060"
   },
   "author": "namu",
   "license": "ISC",
