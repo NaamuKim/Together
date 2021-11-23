@@ -119,7 +119,7 @@ exports.updatePost = asyncHandler( async(req, res) => {
   const userId = await User.findById(user._id).select('-hashedPassword');
 
   const document = await db.Post.findOne({id:id})
-  if(document.writer.id == userId._id || user.role == 'admin') {
+  if(document.writer.id == userId._id || user.role == 'Admin') {
     await document.updateOne({content:content, hashTags: hashTags});
     res.json({ success: true, status: 200, message:`${id} Post updated`})
   } else {
@@ -131,7 +131,7 @@ exports.deletePost = asyncHandler( async(req, res) => {
   const { params: { id }, user} = req;
   const userId = await User.findById(user._id).select('-hashedPassword');
   const document = await db.Post.findOne({id:id})
-  if(document.writer.id == userId._id || user.role == 'admin') {
+  if(document.writer.id == userId._id || user.role == 'Admin') {
     await document.delete();
     res.json({ success: true, status: 200, message:`${id} Post Deleted`})
   } else {
