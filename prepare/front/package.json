@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "cross-env ANALYZE=true NODE_ENV=production next build",
-    "build": "cross-env NODE_ENV=production next start -p 3060"
+    "dev": "next",
+    "build": "cross-env ANALYZE=true NODE_ENV=production next build",
+    "start": "cross-env NODE_ENV=production next start -p 3060"
   },
   "author": "namu",
   "license": "ISC",
@@ -24,6 +25,7 @@
     "antd": "^4.16.13",
     "axios": "^0.22.0",
     "cookie": "^0.4.1",
+    "cross-env": "^7.0.3",
     "emotion-reset": "^3.0.1",
     "immer": "^9.0.6",
     "moment": "^2.29.1",
