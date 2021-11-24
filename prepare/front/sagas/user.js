@@ -1,7 +1,6 @@
 import { all, fork, put, takeLatest, call } from "redux-saga/effects";
 import axios from "axios";
 import cookie from "react-cookies";
-
 import {
   LOG_IN_REQUEST,
   LOG_IN_SUCCESS,

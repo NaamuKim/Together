@@ -17,7 +17,7 @@ const FollowButton = ({ post }) => {
         data: post.writer.id,
       });
     } else {
-      dispatch({ type: FOLLOW_REQUEST, data: post.writer.id });
+      dispatch({ type: FOLLOW_REQUEST, data: post._id });
     }
   }, [isFollowing]);
   if (post.writer.id === me.id) {

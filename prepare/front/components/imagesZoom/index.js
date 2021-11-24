@@ -10,6 +10,7 @@ import {
   SlickWrapper,
 } from "./styles";
 import { backUrl } from "../../config/config";
+import GlobalStyle from "../Global";
 
 const ImagesZoom = ({ images, onClose }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
