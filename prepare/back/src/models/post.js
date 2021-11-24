@@ -9,8 +9,10 @@ const postModel = new Schema({
   },
   content:String,
   writer:{
-    id: String,
-    nickname: String
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    index: true,
+    default: null,
   },
   images:[],
   hashTags:[],

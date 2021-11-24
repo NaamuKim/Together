@@ -17,7 +17,9 @@ exports.login = asyncHandler(async (req, res) => {
   const followers = exUser.followers;
   const followings = exUser.followings;
   const likedPosts = exUser.likedPosts;
-  const posts = await Post.find({"writer.id": id}).sort({createdAt:-1});
+  const posts = await Post.find({writer: id})
+    .populate({path:"writer", select:"nickname"})
+    .sort({createdAt:-1});
   if (!exUser) throw createError(404, 'User Not Found');
   if (exUser.withdrawn) throw createError(403, 'Forbidden');
   if (!exUser.authenticate(password)) throw createError(400, 'Invalid Password');
@@ -42,7 +44,8 @@ exports.logout = asyncHandler(async (req, res) => {
 exports.getMe = asyncHandler(async (req, res) => {
   const { user } = req;
   const data = await User.findById(user._id)
-    .populate({ path: 'followers', select: 'nickname' })
+    .populate({path: "writer", select: "nickname"})
+    .populate({path: 'followers', select: 'nickname' })
     .populate({path: 'followings', select: 'nickname'})
     .populate({path: 'comments', populate: {path: 'writer', select: 'nickname'}, select:'comment'});
   const posts = await Post.find({"writer.id":user._id}).sort({createdAt:-1})
