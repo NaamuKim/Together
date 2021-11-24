@@ -1,8 +1,10 @@
 import React, { useCallback, useState } from "react";
 import Link from "next/link";
 import styled from "@emotion/styled";
+import { Input } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGlobeAsia, faBars } from "@fortawesome/free-solid-svg-icons";
+import useInput from "../hooks/useInput";
 
 const NavStyle = styled.nav`
   color: white;
@@ -32,6 +34,9 @@ const TogetherDiv = styled.div`
     padding-bottom: 10px;
   }
 `;
+const SearchInput = styled(Input.Search)`
+  vertical-align: middle;
+`;
 
 const List = styled.ul`
   display: flex;
@@ -47,17 +52,13 @@ const List = styled.ul`
 `;
 
 const Item = styled.li`
-  width: 100px;
+  width: 100%;
   border-bottom: 5px solid transparent;
   transition: border-bottom.5s ease-in-out;
   display: flex;
   justify-content: center;
-  padding: 8px 12px;
+  margin: 8px;
   align-items: center;
-  &:hover {
-    background-color: #d49466;
-    border-radius: 7px;
-  }
   @media screen and (max-width: 768px) {
     text-align: center;
     width: 100%;
@@ -69,6 +70,11 @@ const Item = styled.li`
 
 const MenuContent = styled.span`
   cursor: pointer;
+  padding: 10px 6px;
+  &:hover {
+    background-color: #d49466;
+    border-radius: 7px;
+  }
 `;
 
 const Home = styled.span`
@@ -89,9 +95,14 @@ const Menu = styled.a`
 
 const Header = () => {
   const [openedMenu, setOpenedMenu] = useState(false);
+  const [searchInput, onChangeSearchInput] = useInput("");
   const onCLickMenu = useCallback(() => {
     setOpenedMenu((prev) => !prev);
   }, []);
+  const onSearch = useCallback(() => {
+    Router.push(`/hashtag/${searchInput}`);
+  }, [searchInput]);
+
   return (
     <NavStyle>
       <TogetherDiv>
@@ -112,6 +123,14 @@ const Header = () => {
           <Link href="/signup">
             <MenuContent>회원가입</MenuContent>
           </Link>
+        </Item>
+        <Item>
+          <SearchInput
+            enterButton
+            value={searchInput}
+            onChange={onChangeSearchInput}
+            onSearch={onSearch}
+          />
         </Item>
       </List>
 

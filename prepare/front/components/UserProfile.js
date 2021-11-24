@@ -20,13 +20,11 @@ const UserProfile = () => {
     <Card
       actions={[
         <div key="posts">
-          <Link href={`/user/${me.id}`}>
-            <a>
-              게시물
-              <br />
-              {me.posts.length}
-            </a>
-          </Link>
+          <a>
+            게시물
+            <br />
+            {me.posts.length}
+          </a>
         </div>,
         <div key="followings">
           <Link href="/profile">
