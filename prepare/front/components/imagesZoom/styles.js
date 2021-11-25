@@ -1,5 +1,4 @@
 import styled from "@emotion/styled";
-import { Global } from "@emotion/react";
 import { CloseOutlined } from "@ant-design/icons";
 
 export const Overlay = styled.div`

@@ -23,10 +23,6 @@ import {
   CHANGE_NICKNAME_REQUEST,
   CHANGE_NICKNAME_SUCCESS,
   CHANGE_NICKNAME_FAILURE,
-  LOAD_FOLLOWINGS_SUCCESS,
-  LOAD_FOLLOWINGS_FAILURE,
-  LOAD_FOLLOWERS_SUCCESS,
-  LOAD_FOLLOWERS_FAILURE,
   LOAD_USER_SUCCESS,
   LOAD_USER_FAILURE,
 } from "../reducers/user";
@@ -41,7 +37,7 @@ function* follow(action) {
     console.log(result.data);
     yield put({
       type: FOLLOW_SUCCESS,
-      data: result.data,
+      data: result.data.data,
     });
   } catch (err) {
     console.error(err);
@@ -53,7 +49,7 @@ function* follow(action) {
 }
 
 function unfollowAPI(data) {
-  return axios.delete(`/user/followings/${data}/option=unfollow`);
+  return axios.patch(`/user/followings/${data}?option=unfollow`);
 }
 
 function* unfollow(action) {
@@ -61,52 +57,12 @@ function* unfollow(action) {
     const result = yield call(unfollowAPI, action.data);
     yield put({
       type: UNFOLLOW_SUCCESS,
-      data: result.data,
+      data: result.data.data,
     });
   } catch (err) {
     console.error(err);
     yield put({
       type: UNFOLLOW_FAILURE,
-      error: err.response.data,
-    });
-  }
-}
-
-function loadFollowersAPI(data) {
-  return axios.get("/user/followers", data);
-}
-
-function* loadFollowers(action) {
-  try {
-    const result = yield call(loadFollowersAPI, action.data);
-    yield put({
-      type: LOAD_FOLLOWERS_SUCCESS,
-      data: result.data,
-    });
-  } catch (err) {
-    console.error(err);
-    yield put({
-      type: LOAD_FOLLOWERS_FAILURE,
-      error: err.response.data,
-    });
-  }
-}
-
-function loadFollowingsAPI(data) {
-  return axios.get("/user/followings", data);
-}
-
-function* loadFollowings(action) {
-  try {
-    const result = yield call(loadFollowingsAPI, action.data);
-    yield put({
-      type: LOAD_FOLLOWINGS_SUCCESS,
-      data: result.data,
-    });
-  } catch (err) {
-    console.error(err);
-    yield put({
-      type: LOAD_FOLLOWINGS_FAILURE,
       error: err.response.data,
     });
   }

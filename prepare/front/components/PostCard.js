@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from "react";
 import { Avatar, Button, Card, Comment, Image, List, Popover } from "antd";
+import { StyledCard } from "./StyledComponents";
 import {
   EllipsisOutlined,
   HeartOutlined,
@@ -73,7 +74,7 @@ const PostCard = ({ post }) => {
   const liked = post.likedUsers.find((v) => v._id === id);
   return (
     <StyledDiv>
-      <Card
+      <StyledCard
         cover={post.images[0] && <PostImages images={post.images} />}
         actions={[
           <RetweetOutlined key="retweet" />,
@@ -139,7 +140,7 @@ const PostCard = ({ post }) => {
         </>
 
         <Image />
-      </Card>
+      </StyledCard>
       {commentFormOpened && (
         <div>
           <CommentForm post={post} />

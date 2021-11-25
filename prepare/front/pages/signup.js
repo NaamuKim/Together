@@ -38,6 +38,7 @@ const Signup = () => {
       Router.replace("/");
     }
   }, [me && me.id]);
+
   useEffect(() => {
     if (signUpDone) {
       Router.replace("/");

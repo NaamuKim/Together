@@ -170,7 +170,7 @@ const reducer = (state = initialState, action) =>
       case FOLLOW_SUCCESS:
         draft.followLoading = false;
         draft.followDone = true;
-        draft.me.followings.push({ id: action.data.userId });
+        draft.me.followings.push({ _id: action.data.userId });
         break;
       case FOLLOW_FAILURE:
         draft.followLoading = false;
@@ -185,7 +185,7 @@ const reducer = (state = initialState, action) =>
         draft.unfollowLoading = false;
         draft.unfollowDone = true;
         draft.me.followings = draft.me.followings.filter(
-          (v) => v.id !== action.data.userId
+          (v) => v._id !== action.data.userId
         );
         break;
       case UNFOLLOW_FAILURE:

@@ -1,9 +1,14 @@
 import React, { useCallback } from "react";
 import { Avatar, Button, Card } from "antd";
 import Link from "next/link";
+import styled from "@emotion/styled";
 import { useDispatch, useSelector } from "react-redux";
 import { LOG_OUT_REQUEST } from "../reducers/user";
 import cookie from "react-cookies";
+
+const ProfileCard = styled(Card)`
+  background-color: #fdfdfe;
+`;
 
 const UserProfile = () => {
   const dispatch = useDispatch();
@@ -17,7 +22,7 @@ const UserProfile = () => {
   }, []);
 
   return (
-    <Card
+    <ProfileCard
       actions={[
         <div key="posts">
           <a>
@@ -59,7 +64,7 @@ const UserProfile = () => {
       <Button onClick={onLogOut} loading={logOutLoading}>
         로그아웃
       </Button>
-    </Card>
+    </ProfileCard>
   );
 };
 

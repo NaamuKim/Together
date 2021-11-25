@@ -47,7 +47,8 @@ const style = css`
   body {
     font-family: "Noto Sans CJK KR", sans-serif;
     box-sizing: border-box;
-    background-color: #1f3b4d;
+    background-color: #fdfdfe;
+    --antd-wave-shadow-color: #baddf9;
   }
   a {
     text-decoration: none;

@@ -7,16 +7,16 @@ import { faGlobeAsia, faBars } from "@fortawesome/free-solid-svg-icons";
 import useInput from "../hooks/useInput";
 
 const NavStyle = styled.nav`
-  color: white;
+  color: #070d0d;
   top: 0;
   left: 0;
   width: 100%;
   height: 50px;
   display: flex;
   align-items: center;
-  background-color: #017374;
+  background-color: #fdfdfe;
   z-index: 10;
-  box-shadow: 1px 2px rgba(0, 0, 0, 0.2);
+  box-shadow: 1px 2px #baddf9;
   margin-bottom: 10px;
   @media screen and (max-width: 768px) {
     flex-direction: column;
@@ -36,6 +36,13 @@ const TogetherDiv = styled.div`
 `;
 const SearchInput = styled(Input.Search)`
   vertical-align: middle;
+  ::selection {
+    background: #fff;
+  }
+  &:hover {
+    border-radius: 5px;
+    border-color: #fff;
+  }
 `;
 
 const List = styled.ul`
@@ -72,7 +79,7 @@ const MenuContent = styled.span`
   cursor: pointer;
   padding: 10px 6px;
   &:hover {
-    background-color: #d49466;
+    background-color: #fddc5c;
     border-radius: 7px;
   }
 `;
@@ -108,7 +115,7 @@ const Header = () => {
       <TogetherDiv>
         <Link href="/">
           <Home>
-            <FontAwesomeIcon icon={faGlobeAsia} color="#D0FEFE" />
+            <FontAwesomeIcon icon={faGlobeAsia} color="#070D0D" />
             Together
           </Home>
         </Link>
