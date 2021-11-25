@@ -37,7 +37,6 @@ const Profile = () => {
     followingsFetcher
   );
 
-  console.log(followersData, followingsData);
   useEffect(() => {
     if (!(me && me.id)) {
       Router.push("/");

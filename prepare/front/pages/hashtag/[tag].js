@@ -9,6 +9,7 @@ import PostCard from "../../components/PostCard";
 import wrapper from "../../store/configureStore";
 import { LOAD_MY_INFO_REQUEST } from "../../reducers/user";
 import AppLayout from "../../components/AppLayout";
+import cookie from "cookie";
 
 const Hashtag = () => {
   const dispatch = useDispatch();
@@ -52,16 +53,18 @@ const Hashtag = () => {
 
 export const getServerSideProps = wrapper.getServerSideProps(
   async (context) => {
-    console.log(context);
-    const cookie = context.req ? context.req.headers.cookie : "";
-    console.log(context);
-    axios.defaults.headers.Cookie = "";
-    if (context.req && cookie) {
-      axios.defaults.headers.Cookie = cookie;
+    const parsedCookie = context.req
+      ? cookie.parse(context.req.headers.cookie || "")
+      : "";
+    if (context.req && parsedCookie) {
+      if (parsedCookie["accessToken"]) {
+        context.store.dispatch({
+          type: LOAD_MY_INFO_REQUEST,
+          data: parsedCookie["accessToken"],
+        });
+      }
     }
-    context.store.dispatch({
-      type: LOAD_MY_INFO_REQUEST,
-    });
+
     context.store.dispatch({
       type: LOAD_HASHTAG_POSTS_REQUEST,
       data: context.params.tag,
