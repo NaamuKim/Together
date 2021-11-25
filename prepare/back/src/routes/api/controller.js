@@ -51,8 +51,9 @@ exports.createPost = asyncHandler( async(req, res) => {
 
   if(!next) { body.id = 0 }
   else { body.id = next.id+1 };
-  const document = await db.Post.create(body);
-
+  const updatedPost = await db.Post.create(body)
+  const document = await db.Post.findById(updatedPost._id)
+    .populate({path:"writer", select:"nickname"});
   res.json({ success: true, status: 201, message:`Number ${body.id} Article Posted`, data: document});
 })
 
