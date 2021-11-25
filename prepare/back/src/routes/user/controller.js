@@ -7,7 +7,6 @@ const { signAccessToken, signRefreshToken, verifyRefreshToken } = require('../..
 
 //팔로잉 추가, 제거
 exports.followings = asyncHandler( async  (req, res) => {
-
   const { params: {userid}, query: {option}, user} = req
   const targetInfo = await User.findById({_id:userid});
   const exists = await User.findById({_id:user._id}).find({followings:userid});
