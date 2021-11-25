@@ -7,23 +7,23 @@ const { signAccessToken, signRefreshToken, verifyRefreshToken } = require('../..
 
 //팔로잉 추가, 제거
 exports.followings = asyncHandler( async  (req, res) => {
-  const { params: {userid}, query: {option}, user} = req
-  const targetInfo = await User.findById({_id:userid});
-  const exists = await User.findById({_id:user._id}).find({followings:userid});
+  const { params: {id}, query: {option}, user} = req
+  const targetInfo = await User.findById({_id:id});
+  const exists = await User.findById({_id:user._id}).find({followings:id});
   const userInfo = await User.findById({_id:user._id});
 
   if(exists.length == 1 && option == "follow") {
-    res.json({success:true, status: 409, message:`Already Followed User ${targetInfo.nickname}`});
+    res.json({success:true, status: 400, message:`Already Followed User ${targetInfo.nickname}`});
   } else if(exists.length == 0 && option == "follow") {
-    await userInfo.updateOne({$push:{followings: userid}});
+    await userInfo.updateOne({$push:{followings: id}});
     await targetInfo.updateOne({$push:{followers: user._id}});
-    res.json({success:true, status: 200, message:`User ${targetInfo.nickname} Followed`});
+    res.json({success:true, status: 200, message:`User ${targetInfo.nickname} Followed`, data:{userId:targetInfo._id}});
   } else if(exists.length == 0 && option == "unfollow") {
     res.json({success:true, status: 400, message:`User ${targetInfo.nickname} Is Not Followed`});
   } else if(exists.length == 1 && option == "unfollow") {
-    await userInfo.updateOne({$pull:{followings: userid}});
+    await userInfo.updateOne({$pull:{followings: id}});
     await targetInfo.updateOne({$pull:{followers: user._id}});
-    res.json({success:true, status: 200, message:`User ${targetInfo.nickname} Unfollowed`});
+    res.json({success:true, status: 200, message:`User ${targetInfo.nickname} Unfollowed`, data:{userId:targetInfo._id}});
   } else {
     res.json({success:true, status: 400, message:"Unable To Handle The Request"})
   }
