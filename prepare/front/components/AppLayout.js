@@ -46,7 +46,7 @@ const AppLayout = ({ children }) => {
               target="_black"
               rel="noreferrer noopener"
             >
-              back-end: made by CheeseLatte
+              back-end: made by CheezeLatte
             </WriterInfo>
           </WriterDiv>
         </Col>

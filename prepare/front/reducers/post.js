@@ -165,7 +165,7 @@ const postReducer = (state = initialState, action) => {
         break;
       case ADD_COMMENT_SUCCESS:
         const post = draft.mainPosts.find((v) => v.id === +action.data.postId);
-        post.comments.unshift(action.data.comment);
+        post.comments.unshift(action.data);
         draft.addCommentLoading = false;
         draft.addCommentDone = true;
         break;
