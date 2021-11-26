@@ -2,6 +2,7 @@ import React, { useCallback, useState } from "react";
 import Link from "next/link";
 import styled from "@emotion/styled";
 import { Input } from "antd";
+import Router from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGlobeAsia, faBars } from "@fortawesome/free-solid-svg-icons";
 import useInput from "../hooks/useInput";
@@ -34,6 +35,7 @@ const TogetherDiv = styled.div`
     padding-bottom: 10px;
   }
 `;
+
 const SearchInput = styled(Input.Search)`
   vertical-align: middle;
   background-color: #baddf9;

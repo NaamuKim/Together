@@ -122,24 +122,18 @@ const PostCard = ({ post }) => {
         ]}
         extra={id && <FollowButton post={post} />}
       >
-        <>
-          <div style={{ float: "right" }}>
-            {moment(post.createdAt).fromNow()}
-          </div>
-          <Card.Meta
-            avatar={
-              <Link href={`/user/${post.writer._id}`}>
-                <a>
-                  <Avatar>{post.writer.nickname[0]}</Avatar>
-                </a>
-              </Link>
-            }
-            title={post.writer.nickname}
-            description={<PostCardContent postData={post.hashTags} />}
-          />
-        </>
-
-        <Image />
+        <div style={{ float: "right" }}>{moment(post.createdAt).fromNow()}</div>
+        <Card.Meta
+          avatar={
+            <Link href={`/user/${post.writer._id}`}>
+              <a>
+                <Avatar>{post.writer.nickname[0]}</Avatar>
+              </a>
+            </Link>
+          }
+          title={post.writer.nickname}
+          description={<PostCardContent postData={post.content} />}
+        />
       </StyledCard>
       {commentFormOpened && (
         <div>
