@@ -174,7 +174,7 @@ function* loadPosts(action) {
 
 function loadHashtagPostsAPI(data, lastId) {
   return axios.get(
-    `/hashtag/${encodeURIComponent(data)}?lastId=${lastId || 0}`
+    `/api/search/${encodeURIComponent(data)}?lastid=${lastId || "first"}`
   );
 }
 
@@ -183,7 +183,7 @@ function* loadHashtagPosts(action) {
     const result = yield call(loadHashtagPostsAPI, action.data, action.lastId);
     yield put({
       type: LOAD_HASHTAG_POSTS_SUCCESS,
-      data: result.data,
+      data: result.data.data,
     });
   } catch (err) {
     console.error(err);

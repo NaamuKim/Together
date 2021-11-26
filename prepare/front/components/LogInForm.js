@@ -35,7 +35,7 @@ const ButtonWrapper = styled.div`
 `;
 
 const Label = styled.label`
-  color: white;
+  color: #070d0d;
 `;
 
 const Button = styled.button`
@@ -45,10 +45,14 @@ const Button = styled.button`
   border: 0;
   outline: none;
   border-radius: 40px;
-  color: white;
+  color: #070d0d;
   font-size: 15px;
   letter-spacing: 2px;
   cursor: pointer;
+`;
+
+const SignUpA = styled.a`
+  color: #070d0d;
 `;
 
 const LogInForm = () => {
@@ -95,9 +99,9 @@ const LogInForm = () => {
         <Button type="primary" htmlType="submit" loading={logInLoading}>
           로그인
         </Button>
-        <Button>
+        <Button type="primary">
           <Link href="signup">
-            <a>회원가입</a>
+            <SignUpA>회원가입</SignUpA>
           </Link>
         </Button>
       </ButtonWrapper>

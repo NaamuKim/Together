@@ -36,6 +36,7 @@ const TogetherDiv = styled.div`
 `;
 const SearchInput = styled(Input.Search)`
   vertical-align: middle;
+  background-color: #baddf9;
   ::selection {
     background: #fff;
   }

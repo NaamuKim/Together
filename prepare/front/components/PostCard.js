@@ -135,7 +135,7 @@ const PostCard = ({ post }) => {
               </Link>
             }
             title={post.writer.nickname}
-            description={<PostCardContent postData={post.content} />}
+            description={<PostCardContent postData={post.hashTags} />}
           />
         </>
 
