@@ -173,3 +173,18 @@ exports.removeLikes = asyncHandler(async(req, res)=> {
 
   res.json({status: 200, success: true, message:`User ${user.nickname} Unliked Post ${id}`, data:{postId:id, userId:userInfo._id}})
 })
+
+//해쉬태그 서치
+exports.searchHashTags = asyncHandler(async(req, res) =>{
+  const {params: {id}, query: {page, limit}} = req;
+  const word = "#" + id
+  const _page = +(page || 1);
+  const _limit = +(limit || 10);
+  const skip = (page - 1) * limit;
+  const data = await db.Post.find({hashTags:{"$in":[word]}})
+    .populate({path: 'writer', select: 'nickname'})
+    .populate({path: 'likedUsers', select: 'nickname'})
+    .populate({path: 'comments', populate: {path: 'writer', select: 'nickname'}, select:'comment'})
+    .sort({createdAt:-1}).skip(skip).limit(_limit);
+  res.json({status:200, success: true, message:`Search For Word ${id} In HashTags`,page: _page, limit: _limit,data: data})
+})

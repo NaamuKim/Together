@@ -20,4 +20,7 @@ router.delete( '/delete/:id', requireLoggedIn, controller.deletePost);
 //종아요 컨트롤
 router.patch('/like/:id', requireLoggedIn, controller.addLikes);
 router.patch('/unlike/:id', requireLoggedIn, controller.removeLikes);
+
+//해쉬태그 검색
+router.get('/search/:id', controller.searchHashTags);
 module.exports = router;
