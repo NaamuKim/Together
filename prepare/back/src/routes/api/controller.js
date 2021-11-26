@@ -46,9 +46,7 @@ exports.createPost = asyncHandler( async(req, res) => {
   const next = await db.Post.findOne().limit(1).sort({id: -1}).select('id');
   const userInfo = await db.User.findById(user._id).select(-'hashedPassword');
   body.writer = userInfo._id
-  if(body.content.match(/#[^\s#]+/g)) body.hashTags = body.content.match(/#[^\s#]+/g);;
-  body.content = body.content.replace(/#[^\s#]+/g,"");
-
+  if(body.content.match(/#[^\s#]+/g)) body.hashTags = body.content.match(/#[^\s#]+/g);
   if(!next) { body.id = 0 }
   else { body.id = next.id+1 };
   const updatedPost = await db.Post.create(body)
@@ -90,9 +88,9 @@ exports.getNexts = asyncHandler(async(req, res)=> {
     .populate({path: 'comments', populate: {path: 'writer', select: 'nickname'}, select:'comment'})
     .sort({createdAt:-1}).skip(skip).limit(_limit);
   if (idConfirm.length == 0)
-    throw createError(403, `${searchId} Post Not Found`);
+    throw createError(400, `${searchId} Post Not Found`);
   if (documents.length == 0)
-    throw createError(403, `${searchId} Is The Last Post`);
+    throw createError(400, `${searchId} Is The Last Post`);
   res.json({page: _page, limit: _limit, data: documents, lastId: documents.slice(-1)[0].id});
 })
 
@@ -176,15 +174,26 @@ exports.removeLikes = asyncHandler(async(req, res)=> {
 
 //해쉬태그 서치
 exports.searchHashTags = asyncHandler(async(req, res) =>{
-  const {params: {id}, query: {page, limit}} = req;
-  const word = "#" + id
+  const {params:{id}, query:{limit, page, lastid}} = req
+  let searchKey = "#"+id
+  let searchId = lastid
+  if(searchId == 'first'){
+    firstDoc = await db.Post.find({hashTags:{"$in":searchKey}}).sort({createdAt:-1})
+    if(firstDoc.length!=0) searchId = firstDoc[0].id
+    else throw createError(400, `${searchKey} HashTag Search Not Found`);
+  }
   const _page = +(page || 1);
   const _limit = +(limit || 10);
   const skip = (page - 1) * limit;
-  const data = await db.Post.find({hashTags:{"$in":[word]}})
+  const idConfirm = await db.Post.find({"id":searchId});
+  const documents = await db.Post.find({$and:[{hashTags:{"$in":searchKey}},{"id":{$lte:searchId}}]})
     .populate({path: 'writer', select: 'nickname'})
     .populate({path: 'likedUsers', select: 'nickname'})
     .populate({path: 'comments', populate: {path: 'writer', select: 'nickname'}, select:'comment'})
     .sort({createdAt:-1}).skip(skip).limit(_limit);
-  res.json({status:200, success: true, message:`Search For Word ${id} In HashTags`,page: _page, limit: _limit,data: data})
+  if (idConfirm.length == 0)
+    throw createError(400, `${searchKey} HashTag Search Not Found`);
+  if (documents.length == 0)
+    throw createError(400, `${searchKey} Is The Last Post`);
+  res.json({page: _page, limit: _limit, data: documents, lastId: documents.slice(-1)[0].id});
 })
