@@ -72,19 +72,27 @@ exports.getPosts = asyncHandler( async(req, res) => {
 });
 
 exports.getMyPosts = asyncHandler(async(req, res) => {
-  const { query: { page, limit },user } = req;
+  const {query:{limit, page, lastid},user} = req
+  let searchId = lastid
+  if(searchId == 'first'){
+    firstDoc = await db.Post.find({writer:user._id}).sort({createdAt:-1})
+    if(firstDoc.length!=0) searchId = firstDoc[0].id
+    else throw createError(400, `${user.nickname} Post Not Found`);
+  }
   const _page = +(page || 1);
   const _limit = +(limit || 10);
   const skip = (page - 1) * limit;
-
-  const total = await db.Post.countDocuments({writer:user._id});
-  const documents = await db.Post.find({writer:user._id})
+  const idConfirm = await db.Post.find({"id":lastid});
+  const documents = await db.Post.find({$and:[{writer:user._id},{"id":{$lte:searchId}}]})
     .populate({path: 'writer', select: 'nickname'})
     .populate({path: 'likedUsers', select: 'nickname'})
     .populate({path: 'comments', populate: {path: 'writer', select: 'nickname'}, select:'comment'})
     .sort({createdAt:-1}).skip(skip).limit(_limit);
-
-  res.json({ total, page: _page, limit: _limit, data: documents });
+  if (idConfirm.length == 0)
+    throw createError(400, `${user.nickname} Post Search Not Found`);
+  if (documents.length == 0)
+    throw createError(400, `${searchId} Is The Last Post`);
+  res.json({page: _page, limit: _limit, data: documents, lastId: documents.slice(-1)[0].id});
 })
 
 exports.getNexts = asyncHandler(async(req, res)=> {
