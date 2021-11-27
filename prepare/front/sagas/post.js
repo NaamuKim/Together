@@ -27,6 +27,9 @@ import {
   REMOVE_POST_SUCCESS,
   REMOVE_POST_OF_ME,
   REMOVE_POST_FAILURE,
+  LOAD_USER_POSTS_SUCCESS,
+  LOAD_USER_POSTS_FAILURE,
+  LOAD_USER_POSTS_REQUEST,
 } from "../reducers/post";
 
 function addCommentAPI(data) {
@@ -194,9 +197,30 @@ function* loadHashtagPosts(action) {
   }
 }
 
+function loadUserPostsAPI(data, lastId) {
+  return axios.get(`/user/${data}/posts?lastId=${lastId || "first"}`);
+}
+
+function* loadUserPosts(action) {
+  try {
+    const result = yield call(loadUserPostsAPI, action.data, action.lastId);
+    yield put({
+      type: LOAD_USER_POSTS_SUCCESS,
+      data: result.data.data,
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: LOAD_USER_POSTS_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
 function* watchAddPost() {
   yield takeLatest(ADD_POST_REQUEST, addPost);
 }
+
 function* watchAddComment() {
   yield takeLatest(ADD_COMMENT_REQUEST, addComment);
 }
@@ -225,6 +249,9 @@ function* watchLoadHashtagPosts() {
   yield throttle(5000, LOAD_HASHTAG_POSTS_REQUEST, loadHashtagPosts);
 }
 
+function* watchLoadUserPosts() {
+  yield throttle(5000, LOAD_USER_POSTS_REQUEST, loadUserPosts);
+}
 export default function* postSaga() {
   yield all([
     fork(watchAddPost),
@@ -235,5 +262,6 @@ export default function* postSaga() {
     fork(watchUnlikePost),
     fork(watchLoadHashtagPosts),
     fork(watchRemovePost),
+    fork(watchLoadUserPosts),
   ]);
 }

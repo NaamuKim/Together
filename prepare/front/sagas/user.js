@@ -25,6 +25,7 @@ import {
   CHANGE_NICKNAME_FAILURE,
   LOAD_USER_SUCCESS,
   LOAD_USER_FAILURE,
+  LOAD_USER_REQUEST,
 } from "../reducers/user";
 
 function followAPI(data) {
@@ -130,7 +131,7 @@ function* loadUser(action) {
     const result = yield call(loadUserAPI, action.data);
     yield put({
       type: LOAD_USER_SUCCESS,
-      data: result.data,
+      data: result.data.data,
     });
   } catch (err) {
     console.error(err);
@@ -219,6 +220,10 @@ function* signUp(action) {
   }
 }
 
+function* watchLoadUser() {
+  yield takeLatest(LOAD_USER_REQUEST, loadUser);
+}
+
 function* watchSignUp() {
   yield takeLatest(SIGN_UP_REQUEST, signUp);
 }
@@ -256,5 +261,6 @@ export default function* userSaga() {
     fork(watchLoadMyInfo),
     fork(watchLogIn),
     fork(watchLogOut),
+    fork(watchLoadUser),
   ]);
 }
