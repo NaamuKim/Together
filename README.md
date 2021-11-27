@@ -29,7 +29,7 @@ Tech Stack
 >MongoDB: As DataBase
 > 
 >JWT: For High Level Authentication
-### Server
+#### Server
 >AWS EC2 Micro Instances
 > 
 >AWS S3 Bucket

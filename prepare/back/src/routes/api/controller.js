@@ -71,6 +71,22 @@ exports.getPosts = asyncHandler( async(req, res) => {
   res.json({ total, page: _page, limit: _limit, data: documents });
 });
 
+exports.getMyPosts = asyncHandler(async(req, res) => {
+  const { query: { page, limit },user } = req;
+  const _page = +(page || 1);
+  const _limit = +(limit || 10);
+  const skip = (page - 1) * limit;
+
+  const total = await db.Post.countDocuments();
+  const documents = await db.Post.find({writer:user._id})
+    .populate({path: 'writer', select: 'nickname'})
+    .populate({path: 'likedUsers', select: 'nickname'})
+    .populate({path: 'comments', populate: {path: 'writer', select: 'nickname'}, select:'comment'})
+    .sort({createdAt:-1}).skip(skip).limit(_limit);
+
+  res.json({ total, page: _page, limit: _limit, data: documents });
+})
+
 exports.getNexts = asyncHandler(async(req, res)=> {
   const {params:{id}, query:{limit, page}} = req
   let searchId = id
@@ -93,19 +109,6 @@ exports.getNexts = asyncHandler(async(req, res)=> {
     throw createError(400, `${searchId} Is The Last Post`);
   res.json({page: _page, limit: _limit, data: documents, lastId: documents.slice(-1)[0].id});
 })
-
-exports.getMyPosts = asyncHandler( async(req, res) =>{
-  const { user } = req;
-  const userId = await User.findById(user._id).select(-'hashedPassword');
-
-  const documents = await db.Post.find({"writer.id": user._id})
-    .populate({path: 'writer', select: 'nickname'})
-    .populate({path: 'likedUsers', select: 'nickname'})
-    .populate({path: 'comments', populate: {path: 'writer', select: 'nickname'}, select:'comment'})
-    .sort({createdAt:-1});
-
-  res.json({ success: true, status: 200, message:`User ${userId.id}'s documents`, data: documents})
-});
 
 exports.getPost = asyncHandler(async(req, res)=>{
   const { params: {id} } = req;
