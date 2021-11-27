@@ -77,7 +77,7 @@ exports.getMyPosts = asyncHandler(async(req, res) => {
   const _limit = +(limit || 10);
   const skip = (page - 1) * limit;
 
-  const total = await db.Post.countDocuments();
+  const total = await db.Post.countDocuments({writer:user._id});
   const documents = await db.Post.find({writer:user._id})
     .populate({path: 'writer', select: 'nickname'})
     .populate({path: 'likedUsers', select: 'nickname'})
