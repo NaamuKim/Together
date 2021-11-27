@@ -82,7 +82,7 @@ exports.getMyPosts = asyncHandler(async(req, res) => {
   const _page = +(page || 1);
   const _limit = +(limit || 10);
   const skip = (page - 1) * limit;
-  const idConfirm = await db.Post.find({"id":lastid});
+  const idConfirm = await db.Post.find({"id":searchId});
   const documents = await db.Post.find({$and:[{writer:user._id},{"id":{$lte:searchId}}]})
     .populate({path: 'writer', select: 'nickname'})
     .populate({path: 'likedUsers', select: 'nickname'})
