@@ -1,17 +1,7 @@
+<h3 align="center"><a href="http://www.toogether.ml">Together v1.1.0</h3>
 
+<h4 align="center">Tech Stack</h4>
 
-
-
-
-
-
-
-
-## [투게더 v1.1.0](http://www.toogether.ml) 
-
-
-
-Tech Stack
 ##### Frontend 
 > React: As Frontend Framework,
 > 
@@ -29,7 +19,7 @@ Tech Stack
 >MongoDB: As DataBase
 > 
 >JWT: For High Level Authentication
-#### Server
+### Server
 >AWS EC2 Micro Instances
 > 
 >AWS S3 Bucket
