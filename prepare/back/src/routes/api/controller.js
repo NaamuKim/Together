@@ -69,7 +69,7 @@ exports.getPosts = asyncHandler( async(req, res) => {
   res.json({ total, page: _page, limit: _limit, data: documents });
 });
 
-exports.getMyPosts = asyncHandler(async(req, res) => {
+exports.getUserPosts = asyncHandler(async(req, res) => {
   const {params:{id},query:{limit, page, lastid}} = req
   let searchId = lastid
   if(searchId == 'first'){
