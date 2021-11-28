@@ -9,7 +9,7 @@ router.get('/users/:id', isAdmin, controller.findUser);//ok 특정 유저 가져
 router.put('/users/:id', isAdmin, controller.updateUser);//ok 유저 정보 업데이트
 
 //개시판 컨트롤
-router.get('/userposts/:id', requireLoggedIn, controller.getUserPosts);
+router.get('/userposts/:id', controller.getUserPosts);
 router.get('/posts', controller.getPosts);
 router.get('/post/:id', controller.getPost);
 router.get('/nexts/:id', controller.getNexts);
