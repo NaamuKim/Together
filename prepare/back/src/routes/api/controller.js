@@ -87,7 +87,7 @@ exports.getUserPosts = asyncHandler(async(req, res) => {
     .populate({path: 'likedUsers', select: 'nickname'})
     .populate({path: 'comments', populate: {path: 'writer', select: 'nickname'}, select:'comment'})
     .sort({createdAt:-1}).skip(skip).limit(_limit);
-  if (userConfirm.length == 0) throw createError(400, `${userConfirm.nickname} User Not Found`);
+  if (!userConfirm) throw createError(400, `${userConfirm.nickname} User Not Found`);
   if (idConfirm.length == 0) throw createError(400, `${userConfirm.nickname} Posts Search Not Found`);
   if (documents.length == 0) throw createError(400, `${searchId} Is The Last Post`);
   res.json({page: _page, limit: _limit, data: documents, lastId: documents.slice(-1)[0].id});
