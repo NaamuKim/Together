@@ -87,7 +87,7 @@ exports.removeComments = asyncHandler(async(req,res) => {
   if( document.writer == user._id || user.role == "Admin") {
     await document.delete()
     await post.updateOne({$pull:{Comments:id}})
-    res.json({success: true, status: 200, message: "Comment Deleted", data:{postId: document.contentId}})
+    res.json({success: true, status: 200, message: "Comment Deleted", data:{postId: document.contentId, commentsId: id}})
   } else {
     throw createError(400, "Unable To Handle The Request")
   }

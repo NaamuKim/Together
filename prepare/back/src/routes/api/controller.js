@@ -14,7 +14,6 @@ exports.findUsers = asyncHandler(async (req, res) => {
   const documents = await User.find({})
     .populate({path: 'likedUsers', select: 'nickname'})
     .skip(skip).limit(_limit);
-
   res.json({ total, page: _page, limit: _limit, data: documents })
 });
 
@@ -27,7 +26,6 @@ exports.findUser = asyncHandler(async (req, res) => {
 
 exports.updateUser = asyncHandler(async (req, res) => {
   const { body: $set, params: { id } } = req;
-
   delete $set.role;
   const nicknameDuple = await User.findOne({nickname: $set.nickname});
   const emailDuple = await User.findOne({email: $set.email});
@@ -207,4 +205,18 @@ exports.searchHashTags = asyncHandler(async(req, res) =>{
   if (documents.length == 0)
     throw createError(400, `${searchKey} Is The Last Post`);
   res.json({page: _page, limit: _limit, data: documents, lastId: documents.slice(-1)[0].id});
+})
+
+//유저 정보 검색
+exports.searchUserInfo = asyncHandler(async(req, res)=> {
+  const{params:{id}} = req
+
+  const document = await db.User.findById(id)
+  if(document.length == 0) throw createError(400, "No User Found");
+
+  const postCount = await db.Post.countDocuments({writer:id})
+  const followersCount = document.followers.length;
+  const followingsCount = document.followings.length;
+
+  res.json({status: 200, success: true, message: `${document.nickname}'s Info`,data:{postCount:postCount, followersCount:followersCount, followingsCount:followingsCount, nickname: document.nickname}})
 })

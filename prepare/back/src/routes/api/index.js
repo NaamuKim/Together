@@ -23,4 +23,7 @@ router.patch('/unlike/:id', requireLoggedIn, controller.removeLikes);
 
 //해쉬태그 검색
 router.get('/search/:id', controller.searchHashTags);
+
+//유저 정보 검색
+router.get('/userinfo/:id', controller.searchUserInfo)
 module.exports = router;
