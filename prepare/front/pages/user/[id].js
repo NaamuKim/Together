@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { END } from "redux-saga";
 import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import { Card, Avatar } from "antd";
@@ -11,6 +10,11 @@ import { LOAD_MY_INFO_REQUEST, LOAD_USER_REQUEST } from "../../reducers/user";
 import wrapper from "../../store/configureStore";
 import AppLayout from "../../components/AppLayout";
 import cookie from "cookie";
+import styled from "@emotion/styled";
+
+const UserCard = styled(Card)`
+  margin-bottom: 20px;
+`;
 
 const User = () => {
   const dispatch = useDispatch();
@@ -76,22 +80,22 @@ const User = () => {
       )}
 
       {userInfo ? (
-        <Card
+        <UserCard
           actions={[
             <div key="twit">
               투게더
               <br />
-              {userInfo.Posts}
+              {userInfo.postCount}
             </div>,
             <div key="following">
               팔로잉
               <br />
-              {userInfo.Followings}
+              {userInfo.followingsCount}
             </div>,
             <div key="followers">
               팔로워
               <br />
-              {userInfo.Followers}
+              {userInfo.followersCount}
             </div>,
           ]}
         >
@@ -99,8 +103,9 @@ const User = () => {
             avatar={<Avatar>{userInfo.nickname[0]}</Avatar>}
             title={userInfo.nickname}
           />
-        </Card>
+        </UserCard>
       ) : null}
+
       {mainPosts.map((c) => (
         <PostCard key={c.id} post={c} />
       ))}

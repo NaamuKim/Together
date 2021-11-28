@@ -19,6 +19,7 @@ import CommentForm from "./CommentForm";
 import { useDispatch, useSelector } from "react-redux";
 import {
   LIKE_POST_REQUEST,
+  REMOVE_COMMENT_REQUEST,
   REMOVE_POST_REQUEST,
   UNLIKE_POST_REQUEST,
 } from "../reducers/post";
@@ -86,7 +87,10 @@ const PostCard = ({ post }) => {
     if (!id) {
       return alert("로그인이 필요합니다");
     }
-    console.log("HaHa");
+    dispatch({
+      type: REMOVE_COMMENT_REQUEST,
+      data: post.id,
+    });
   }, [id]);
 
   const liked = post.likedUsers.find((v) => v._id === id);
@@ -162,11 +166,16 @@ const PostCard = ({ post }) => {
             dataSource={post.comments}
             renderItem={(item) => (
               <List.Item
-                actions={[
-                  <DeleteSpan key="list-delete" onClick={onRemoveComment}>
-                    {isMyComment ? "삭제" : ""}
-                  </DeleteSpan>,
-                ]}
+                actions={
+                  isMyComment && [
+                    <DeleteSpan
+                      key={post.comments.id}
+                      onClick={onRemoveComment}
+                    >
+                      삭제
+                    </DeleteSpan>,
+                  ]
+                }
               >
                 <Comment
                   author={item.writer.nickname}

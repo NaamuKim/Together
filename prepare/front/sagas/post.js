@@ -31,6 +31,8 @@ import {
   LOAD_USER_POSTS_FAILURE,
   LOAD_USER_POSTS_REQUEST,
   REMOVE_COMMENT_SUCCESS,
+  REMOVE_COMMENT_REQUEST,
+  REMOVE_COMMENT_FAILURE,
 } from "../reducers/post";
 
 function addCommentAPI(data) {
@@ -199,7 +201,7 @@ function* loadHashtagPosts(action) {
 }
 
 function loadUserPostsAPI(data, lastId) {
-  return axios.get(`/user/${data}/posts?lastId=${lastId || "first"}`);
+  return axios.get(`/api/userposts/${data}?lastid=${lastId || "first"}`);
 }
 
 function* loadUserPosts(action) {
@@ -219,7 +221,7 @@ function* loadUserPosts(action) {
 }
 
 function removeCommentAPI(data) {
-  return axios.delete(`/post/${data}`);
+  return axios.delete(`/user/comments/${data}`);
 }
 
 function* removeComment(action) {
@@ -229,11 +231,11 @@ function* removeComment(action) {
       type: REMOVE_COMMENT_SUCCESS,
       data: result.data.data,
     });
-    yield put({ type: REMOVE_POST_OF_ME, data: action.data });
+    // yield put({ type: REMOVE_COMMENT_OF_ME, data: action.data });
   } catch (err) {
     console.error(err);
     yield put({
-      type: REMOVE_POST_FAILURE,
+      type: REMOVE_COMMENT_FAILURE,
       error: err.response.data,
     });
   }

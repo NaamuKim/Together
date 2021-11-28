@@ -18,7 +18,7 @@ const SubmitWrapper = styled.div`
 `;
 
 const Label = styled.label`
-  color: white;
+  color: #070d0d;
 `;
 
 const InputStyle = styled(Input)`
