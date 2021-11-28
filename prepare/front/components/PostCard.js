@@ -29,6 +29,15 @@ const StyledDiv = styled.div`
   margin-bottom: 20px;
 `;
 
+const DeleteSpan = styled.span`
+  margin-bottom: 20px;
+  float: right;
+  cursor: pointer;
+  :hover {
+    color: #000;
+  }
+`;
+
 moment.locale("ko");
 
 const PostCard = ({ post }) => {
@@ -36,6 +45,8 @@ const PostCard = ({ post }) => {
   const { removePostLoading } = useSelector((state) => state.post);
   const id = useSelector((state) => state.user.me?.id);
   const [commentFormOpened, setCommentFormOpened] = useState(false);
+  const isMyComment = post.comments.find((v) => v.writer._id === id);
+  console.log(isMyComment);
 
   const onLike = useCallback(() => {
     if (!id) {
@@ -69,6 +80,13 @@ const PostCard = ({ post }) => {
       type: REMOVE_POST_REQUEST,
       data: post.id,
     });
+  }, [id]);
+
+  const onRemoveComment = useCallback(() => {
+    if (!id) {
+      return alert("로그인이 필요합니다");
+    }
+    console.log("HaHa");
   }, [id]);
 
   const liked = post.likedUsers.find((v) => v._id === id);
@@ -143,13 +161,19 @@ const PostCard = ({ post }) => {
             itemLayout="horizontal"
             dataSource={post.comments}
             renderItem={(item) => (
-              <li>
+              <List.Item
+                actions={[
+                  <DeleteSpan key="list-delete" onClick={onRemoveComment}>
+                    {isMyComment ? "삭제" : ""}
+                  </DeleteSpan>,
+                ]}
+              >
                 <Comment
                   author={item.writer.nickname}
                   avatar={<Avatar>{item.writer.nickname}</Avatar>}
                   content={item.comment}
                 />
-              </li>
+              </List.Item>
             )}
           />
         </div>

@@ -23,6 +23,9 @@ export const initialState = {
   removePostLoading: false,
   removePostDone: false,
   removePostError: null,
+  removeCommentLoading: false,
+  removeCommentDone: false,
+  removeCommentError: null,
 };
 
 export const LIKE_POST_REQUEST = "LIKE_POST_REQUEST";
@@ -60,6 +63,10 @@ export const LOAD_POSTS_FAILURE = "LOAD_POSTS_FAILURE";
 export const REMOVE_POST_REQUEST = "REMOVE_POST_REQUEST";
 export const REMOVE_POST_SUCCESS = "REMOVE_POST_SUCCESS";
 export const REMOVE_POST_FAILURE = "REMOVE_POST_FAILURE";
+
+export const REMOVE_COMMENT_REQUEST = "REMOVE_COMMENT_REQUEST";
+export const REMOVE_COMMENT_SUCCESS = "REMOVE_COMMENT_SUCCESS";
+export const REMOVE_COMMENT_FAILURE = "REMOVE_COMMENT_FAILURE";
 
 export const REMOVE_IMAGE = "REMOVE_IMAGE";
 
@@ -176,6 +183,22 @@ const postReducer = (state = initialState, action) => {
       case ADD_COMMENT_FAILURE:
         draft.addCommentLoading = false;
         draft.addCommentError = action.error;
+        break;
+      case REMOVE_COMMENT_REQUEST:
+        draft.removePostLoading = true;
+        draft.removePostDone = false;
+        draft.removePostError = null;
+        break;
+      case REMOVE_COMMENT_SUCCESS:
+        draft.removePostLoading = false;
+        draft.removePostDone = true;
+        draft.mainPosts.comments = draft.mainPosts.comments.filter(
+          (v) => v.id !== action.data.commentId
+        );
+        break;
+      case REMOVE_COMMENT_FAILURE:
+        draft.removePostLoading = false;
+        draft.removePostError = action.error;
         break;
       case UPLOAD_IMAGES_REQUEST:
         draft.uploadImagesLoading = true;

@@ -123,7 +123,7 @@ function* loadMyInfo(action) {
 }
 
 function loadUserAPI(data) {
-  return axios.get(`/api/users/${data}`);
+  return axios.get(`/api/userInfo/${data}`);
 }
 
 function* loadUser(action) {
