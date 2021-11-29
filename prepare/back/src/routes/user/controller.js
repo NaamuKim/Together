@@ -75,7 +75,7 @@ exports.addComments = asyncHandler(async(req, res)=> {
     .populate({path:"writer", select:'nickname' })
   await post.updateOne({$push:{comments:documents._id}})
 
-  res.json({success:true, status: 200, message: "Comment Added", data:{postId:id, comment:data.comment, writer:data.writer}});
+  res.json({success:true, status: 200, message: "Comment Added", data:{postId:id, comment:data.comment, writer:data.writer, commentsId:documents._id}});
 })
 
 exports.removeComments = asyncHandler(async(req,res) => {
