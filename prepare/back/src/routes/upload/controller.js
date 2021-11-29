@@ -46,7 +46,7 @@ exports.getImage_S3_400 = asyncHandler(async(req, res) => {
   const streamParams = {
     downloadParams:{
       Bucket: AWS_BUCKET_NAME_IMG_400,
-      key: id
+      Key: id
     },
   }
   res.type('jpeg')
