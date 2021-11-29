@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react";
-import { Avatar, Button, Card, Comment, Image, List, Popover } from "antd";
+import { Avatar, Button, Card, Comment, List, Popover } from "antd";
 import { StyledCard } from "./StyledComponents";
 import {
   EllipsisOutlined,
@@ -25,19 +25,20 @@ import {
 } from "../reducers/post";
 import FollowButton from "./FollowButton";
 import PostCardContent from "./PostCardContent";
+import CommentCard from "./CommentCard";
 
 const StyledDiv = styled.div`
   margin-bottom: 20px;
 `;
 
-const DeleteSpan = styled.span`
-  margin-bottom: 20px;
-  float: right;
-  cursor: pointer;
-  :hover {
-    color: #000;
-  }
-`;
+// const DeleteSpan = styled.span`
+//   margin-bottom: 20px;
+//   float: right;
+//   cursor: pointer;
+//   :hover {
+//     color: #000;
+//   }
+// `;
 
 moment.locale("ko");
 
@@ -46,9 +47,6 @@ const PostCard = ({ post }) => {
   const { removePostLoading } = useSelector((state) => state.post);
   const id = useSelector((state) => state.user.me?.id);
   const [commentFormOpened, setCommentFormOpened] = useState(false);
-  const isMyComment = post.comments.find((v) => v.writer._id === id);
-  console.log(isMyComment);
-
   const onLike = useCallback(() => {
     if (!id) {
       return alert("로그인이 필요합니다");
@@ -83,17 +81,8 @@ const PostCard = ({ post }) => {
     });
   }, [id]);
 
-  const onRemoveComment = useCallback(() => {
-    if (!id) {
-      return alert("로그인이 필요합니다");
-    }
-    dispatch({
-      type: REMOVE_COMMENT_REQUEST,
-      data: post.id,
-    });
-  }, [id]);
-
   const liked = post.likedUsers.find((v) => v._id === id);
+
   return (
     <StyledDiv>
       <StyledCard
@@ -160,31 +149,7 @@ const PostCard = ({ post }) => {
       {commentFormOpened && (
         <div>
           <CommentForm post={post} />
-          <List
-            header={`${post.comments.length}개의 댓글`}
-            itemLayout="horizontal"
-            dataSource={post.comments}
-            renderItem={(item) => (
-              <List.Item
-                actions={
-                  isMyComment && [
-                    <DeleteSpan
-                      key={post.comments.id}
-                      onClick={onRemoveComment}
-                    >
-                      삭제
-                    </DeleteSpan>,
-                  ]
-                }
-              >
-                <Comment
-                  author={item.writer.nickname}
-                  avatar={<Avatar>{item.writer.nickname}</Avatar>}
-                  content={item.comment}
-                />
-              </List.Item>
-            )}
-          />
+          <CommentCard key={post.comments._id} comments={post.comments} />
         </div>
       )}
     </StyledDiv>

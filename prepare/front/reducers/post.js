@@ -107,7 +107,6 @@ const postReducer = (state = initialState, action) => {
         break;
       case LIKE_POST_SUCCESS:
         {
-          console.log(action.data);
           const post = draft.mainPosts.find(
             (v) => v.id === +action.data.postId
           );
@@ -178,8 +177,12 @@ const postReducer = (state = initialState, action) => {
         draft.addCommentError = null;
         break;
       case ADD_COMMENT_SUCCESS:
-        const post = draft.mainPosts.find((v) => v.id === +action.data.postId);
-        post.comments.unshift(action.data);
+        {
+          const post = draft.mainPosts.find(
+            (v) => v.id === +action.data.postId
+          );
+          post.comments.unshift(action.data);
+        }
         draft.addCommentLoading = false;
         draft.addCommentDone = true;
         break;
@@ -193,11 +196,16 @@ const postReducer = (state = initialState, action) => {
         draft.removePostError = null;
         break;
       case REMOVE_COMMENT_SUCCESS:
+        {
+          const post = draft.mainPosts.find(
+            (v) => v.id === +action.data.postId
+          );
+          post.comments = post.comments.filter(
+            (v) => v._id !== action.data.commentsId
+          );
+        }
         draft.removePostLoading = false;
         draft.removePostDone = true;
-        draft.mainPosts.comments = draft.mainPosts.comments.filter(
-          (v) => v.id !== action.data.commentId
-        );
         break;
       case REMOVE_COMMENT_FAILURE:
         draft.removePostLoading = false;

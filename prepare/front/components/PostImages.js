@@ -20,7 +20,7 @@ const PostImages = ({ images }) => {
       <>
         <img
           role="presentation"
-          src={`${backUrl}/upload/img/${images[0]}`}
+          src={`${backUrl}/upload/img_thumb/${images[0]}`}
           alt={images[0]}
           onClick={onZoom}
         />
@@ -34,14 +34,14 @@ const PostImages = ({ images }) => {
         <img
           role="presentation"
           width="50%"
-          src={`${backUrl}/upload/img/${images[0]}`}
+          src={`${backUrl}/upload/img_thumb/${images[0]}`}
           alt={images[0]}
           onClick={onZoom}
         />
         <img
           role="presentation"
           width="50%"
-          src={`${backUrl}/upload/img/${images[1]}`}
+          src={`${backUrl}/upload/img_thumb/${images[1]}`}
           alt={images[1]}
           onClick={onZoom}
         />
