@@ -92,7 +92,7 @@ const PostForm = () => {
               alt={v}
             />
             <div>
-              <Button>제거</Button>
+              <Button onClick={onRemoveImage}>제거</Button>
             </div>
           </div>
         ))}
