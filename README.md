@@ -3,7 +3,7 @@
 <h4 align="center">Tech Stack</h4>
 
 ##### Frontend 
-> React: As Frontend Framework,
+>React: As Frontend Framework,
 > 
 >Redux: For React DataFlow Handling
 > 
@@ -19,7 +19,7 @@
 >MongoDB: As DataBase
 > 
 >JWT: For High Level Authentication
-### Server
+##### Server
 >AWS EC2 Micro Instances
 > 
 >AWS S3 Bucket
