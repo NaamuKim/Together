@@ -258,7 +258,7 @@ function* watchUploadImages() {
 }
 
 function* watchLoadPosts() {
-  yield throttle(5000, LOAD_POSTS_REQUEST, loadPosts);
+  yield throttle(300, LOAD_POSTS_REQUEST, loadPosts);
 }
 
 function* watchLikePost() {
@@ -270,11 +270,11 @@ function* watchUnlikePost() {
 }
 
 function* watchLoadHashtagPosts() {
-  yield throttle(5000, LOAD_HASHTAG_POSTS_REQUEST, loadHashtagPosts);
+  yield throttle(300, LOAD_HASHTAG_POSTS_REQUEST, loadHashtagPosts);
 }
 
 function* watchLoadUserPosts() {
-  yield throttle(5000, LOAD_USER_POSTS_REQUEST, loadUserPosts);
+  yield throttle(300, LOAD_USER_POSTS_REQUEST, loadUserPosts);
 }
 
 function* watchRemoveComment() {

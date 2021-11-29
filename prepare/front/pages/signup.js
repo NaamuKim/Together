@@ -7,7 +7,10 @@ import { Button, Checkbox, Form, Input } from "antd";
 import styled from "@emotion/styled";
 import useInput from "../hooks/useInput";
 import { useDispatch } from "react-redux";
-import { SIGN_UP_REQUEST } from "../reducers/user";
+import { LOAD_MY_INFO_REQUEST, SIGN_UP_REQUEST } from "../reducers/user";
+import wrapper from "../store/configureStore";
+import cookie from "cookie";
+import { END } from "redux-saga";
 
 const ErrorMessage = styled.div`
   color: darkred;
@@ -146,5 +149,23 @@ const Signup = () => {
     </AppLayout>
   );
 };
+
+export const getServerSideProps = wrapper.getServerSideProps(
+  async (context) => {
+    const parsedCookie = context.req
+      ? cookie.parse(context.req.headers.cookie || "")
+      : "";
+    if (context.req && parsedCookie) {
+      if (parsedCookie["accessToken"]) {
+        context.store.dispatch({
+          type: LOAD_MY_INFO_REQUEST,
+          data: parsedCookie["accessToken"],
+        });
+      }
+    }
+    context.store.dispatch(END);
+    await context.store.sagaTask.toPromise();
+  }
+);
 
 export default Signup;
