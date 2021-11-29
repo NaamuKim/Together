@@ -2,9 +2,10 @@ const asyncHandler = require('express-async-handler');
 const createError = require('http-errors');
 const fs = require('fs');
 const aws = require('aws-sdk');
-const {AWS_S3_KEY, AWS_S3_PRIVATE_KEY, AWS_BUCKET_NAME_IMG} = require('../../config')
+const {AWS_S3_KEY, AWS_S3_PRIVATE_KEY, AWS_BUCKET_NAME_IMG, AWS_BUCKET_NAME_IMG_400} = require('../../config')
 const { User, Post } = require('../../models');
 const { signAccessToken, signRefreshToken, verifyRefreshToken } = require('../../utils/jwt');
+const stream = require("stream");
 
 const s3 = new aws.S3({
   accessKeyId: AWS_S3_KEY,
@@ -34,6 +35,18 @@ exports.getImage_S3 = asyncHandler( async(req, res) =>{
     downloadParams:{
       Bucket: AWS_BUCKET_NAME_IMG,
       Key: id
+    },
+  }
+  res.type('jpeg')
+  await s3.getObject(streamParams.downloadParams).createReadStream().pipe(res);
+})
+
+exports.getImage_S3_400 = asyncHandler(async(req, res) => {
+  const {params:{id}} = req;
+  const streamParams = {
+    downloadParams:{
+      Bucket: AWS_BUCKET_NAME_IMG_400,
+      key: id
     },
   }
   res.type('jpeg')
