@@ -56,5 +56,5 @@ const router = Router();
 
 router.post('/img', requireLoggedIn, upload_s3.array('img'),controller.uploadImages);
 router.get('/img/:id', controller.getImage_S3 );
-router.get('/img_thumb/:id', controller.getImage_S3_400);_
+router.get('/img_thumb/:id', controller.getImage_S3_400);
 module.exports = router;
