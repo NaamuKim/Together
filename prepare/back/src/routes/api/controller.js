@@ -141,9 +141,8 @@ exports.updatePost = asyncHandler( async(req, res) => {
 
 exports.deletePost = asyncHandler( async(req, res) => {
   const { params: { id }, user} = req;
-  const userId = await User.findById(user._id).select('-hashedPassword');
   const document = await db.Post.findOne({id:id})
-  if(document.writer == userId._id || user.role == 'Admin') {
+  if(document.writer == user._id || user.role == 'Admin') {
     await document.delete();
     res.json({ success: true, status: 200, message:`${id} Post Deleted` ,data:{postId: id}})
   } else {
